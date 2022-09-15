@@ -14,3 +14,11 @@ output "subnet_id_a" {
 output "subnet_id_b" {
   value = yandex_vpc_subnet.subnet_zone_b.network_id
 }
+
+output "zone" {
+  value = data.yandex_dns_zone.eladminru.zone
+}
+
+output "external_ip_address_ngnix" {
+  value = yandex_compute_instance.nginx.network_interface[0].nat_ip_address
+}

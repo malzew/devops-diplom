@@ -16,4 +16,3 @@ terraform {
     skip_credentials_validation = true
   }
 }
-
