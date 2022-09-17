@@ -16,3 +16,10 @@ terraform {
     skip_credentials_validation = true
   }
 }
+
+provider "yandex" {
+  service_account_key_file = "key.json"
+  cloud_id  = "b1g2n2okvr289487oale"
+  folder_id = "b1gg33hbpnn7at4oorel"
+  zone      = "ru-central1-a"
+}

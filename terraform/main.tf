@@ -1,64 +1,7 @@
-provider "yandex" {
-  service_account_key_file = "key.json"
-  cloud_id  = "b1g2n2okvr289487oale"
-  folder_id = "b1gg33hbpnn7at4oorel"
-  zone      = "ru-central1-a"
-}
-
-# Получим данные клиента
-data "yandex_client_config" "client" {}
 
 # Образ берем стандартный, предоставляемый Яндексом, по семейству
 data "yandex_compute_image" "ubuntu" {
   family = "ubuntu-2204-lts"
-}
-
-data "yandex_dns_zone" "eladminru" {
-  name = "eladminru"
-}
-
-# Создаем сеть
-resource "yandex_vpc_network" "default" {
-  name = "net"
-}
-
-# Создаем подсеть в зоне A
-resource "yandex_vpc_subnet" "subnet_zone_a" {
-  zone       = "ru-central1-a"
-  network_id = yandex_vpc_network.default.id
-  v4_cidr_blocks = ["192.168.20.0/24"]
-}
-
-# Создаем подсеть в зоне B
-resource "yandex_vpc_subnet" "subnet_zone_b" {
-  zone       = "ru-central1-b"
-  network_id = yandex_vpc_network.default.id
-  v4_cidr_blocks = ["192.168.30.0/24"]
-}
-
-
-locals {
-  dns_zone = "eladmin.ru"
-
-  node_instance_type_map = {
-    stage = "standard-v1"
-    prod  = "standard-v2"
-  }
-
-  node_instance_foreach_map = {
-    "foreach-01" = "ru-central1-a"
-    "foreach-02" = "ru-central1-a"
-  }
-}
-
-resource "yandex_dns_recordset" "rs1" {
-  zone_id = data.yandex_dns_zone.eladminru.id
-  name    = "${local.dns_zone}."
-  type    = "A"
-  ttl     = 200
-  data    = yandex_compute_instance.nginx.network_interface[0].nat_ip_address
-
-  depends_on = [yandex_compute_instance.nginx]
 }
 
 # Создаем ВМ, задаем имя, платформу, зону, имя хоста с помощью for_each
