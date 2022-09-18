@@ -1,0 +1,8 @@
+---
+- name: Restart proxy
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.proxy_add_nat

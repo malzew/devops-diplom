@@ -40,6 +40,9 @@ key.json
 .terraform.lock.hcl
 
 secrets.tf
+
+inventory
+
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/.gitignore
 /.idea/devops-diplom.iml

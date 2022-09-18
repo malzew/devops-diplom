@@ -5,13 +5,23 @@ locals {
     stage = "standard-v1"
     prod  = "standard-v2"
   }
+}
 
-  node_instance_foreach_map = {
-    "foreach-01" = "ru-central1-a"
-    "foreach-02" = "ru-central1-a"
-  }
+# Образ берем стандартный, предоставляемый Яндексом, по семейству
+data "yandex_compute_image" "ubuntu" {
+  family = "ubuntu-2204-lts"
 }
 
 data "yandex_dns_zone" "zone" {
   name = "eladminru"
+}
+
+variable "services" {
+  default = {
+    www = "www"
+    gitlab = "gitlab"
+    grafana = "grafana"
+    prometheus = "prometheus"
+    alertmanager = "alertmanager"
+  }
 }

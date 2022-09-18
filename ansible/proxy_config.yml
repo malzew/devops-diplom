@@ -1,0 +1,9 @@
+---
+- name: Create proxy server config files
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.proxy_add_config
+    when: domain_name is defined

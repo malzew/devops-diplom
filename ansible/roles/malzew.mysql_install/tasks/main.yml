@@ -1,0 +1,7 @@
+---
+- name: Update apt and install MySQL
+  ansible.builtin.apt:
+    pkg:
+      - mysql
+    state: present
+    update_cache: true

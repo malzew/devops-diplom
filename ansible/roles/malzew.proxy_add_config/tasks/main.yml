@@ -1,0 +1,15 @@
+---
+- name: "Create proxy server config file from j2 template"
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ conf_dir }}/{{ domain_name }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: domain_name is defined and conf_dir is defined and service_ip_port is defined
+
+- name: Remove default config file
+  ansible.builtin.file:
+    path: "{{ conf_dir }}/{{ default_conf_file }}"
+    state: absent
+  when: default_conf_file is defined and conf_dir is defined

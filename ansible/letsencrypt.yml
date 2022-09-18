@@ -1,0 +1,9 @@
+---
+- name: Letsencrypt TLS cert create
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.letsencrypt
+    when: domain_name is defined

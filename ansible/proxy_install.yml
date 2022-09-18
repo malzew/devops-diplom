@@ -1,0 +1,24 @@
+---
+- name: Install of Requrements Tools
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.install_tools
+
+- name: NGINX install
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.nginx_install
+
+- name: NGINX restart
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.nginx_restart

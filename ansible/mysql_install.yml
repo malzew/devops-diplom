@@ -1,0 +1,16 @@
+---
+- name: Install of Requrements Tools
+  hosts: mysql
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.install_tools
+
+- name: Install of Requrements Tools
+  hosts: mysql
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.mysql_install

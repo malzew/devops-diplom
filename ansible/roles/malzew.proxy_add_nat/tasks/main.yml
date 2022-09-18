@@ -1,0 +1,17 @@
+---
+- name: Enable IPv4 forwarding
+  ansible.builtin.sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+    reload: True
+
+- name: Create Iptables NAT chain
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    out_interface: '{{ masquerade_out_interface }}'
+    source: '{{ masquerade_source }}'
+    jump: MASQUERADE
+    comment: Ansible NAT Masquerade
+  when: masquerade_out_interface is defined and masquerade_source is defined

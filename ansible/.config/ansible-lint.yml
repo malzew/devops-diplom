@@ -1,0 +1,7 @@
+skip_list:  # or 'skip_list' to silence them completely
+  - var-spacing  # Jinja2 variables and filters should have spaces before and after.
+  - yaml[truthy]  # Violations reported by yamllint.
+  - no-changed-when  # Commands should not change things if nothing needs doing.
+  - risky-shell-pipe  # Shells that use pipes should set the pipefail option.
+  - yaml[line-length]  # Violations reported by yamllint.
+  - role-name

@@ -1,0 +1,32 @@
+---
+- name: Allow access to tcp ports in UFW configuration
+  community.general.ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  loop:
+    - 22
+    - 80
+    - 443
+
+- name: Deny everything by default and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny
+
+- name: Add NGINX apt key
+  ansible.builtin.apt_key:
+    url: http://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: Add apt NGINX repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://nginx.org/packages/{{ ansible_lsb.id|lower }} {{ ansible_lsb.codename|lower }} nginx"
+    state: present
+
+- name: Update apt and install NGINX
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+    state: present
+    update_cache: true
