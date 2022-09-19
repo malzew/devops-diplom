@@ -7,7 +7,7 @@
   roles:
   - role: malzew.install_tools
 
-- name: Install of Requrements Tools
+- name: Install MySQL
   hosts: mysql
   become: yes
   become_user: root

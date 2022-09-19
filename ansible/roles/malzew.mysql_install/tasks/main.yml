@@ -1,7 +1,12 @@
 ---
-- name: Update apt and install MySQL
+- name: Update apt and install MySQL server
   ansible.builtin.apt:
     pkg:
-      - mysql
+      - mysql-server
     state: present
     update_cache: true
+
+- name: Make sure pymysql is present
+  pip:
+    name: pymysql
+    state: present

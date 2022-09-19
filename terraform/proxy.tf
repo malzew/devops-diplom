@@ -29,9 +29,14 @@ resource "yandex_compute_instance" "nginx" {
   }
 
   # Создаем сетевой интерфейс у ВМ, с адресом из ранее созданной подсети и NAT, чтобы был доступ из инета
+#  network_interface {
+#    subnet_id = yandex_vpc_subnet.subnet_zone_a_dmz.id
+#    nat = "true"
+#  }
+
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a.id
-      nat = "true"
+    nat = "true"
   }
 
   # Передаем свои SSH ключи для авторизации

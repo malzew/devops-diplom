@@ -1,0 +1,24 @@
+---
+- name: Create a new database with name '{{ database_name }}'
+  community.mysql.mysql_db:
+    name: "{{ database_name }}"
+    state: present
+    login_unix_socket: /run/mysqld/mysqld.sock
+  when: database_name is defined
+
+- name: Create database '{{ database_name }}' user with password and all database privileges
+  community.mysql.mysql_user:
+    name: "{{ database_user }}"
+    password: "{{ database_password }}"
+    priv: '{{ database_name }}.*:ALL'
+    host: '%'
+    state: present
+    login_unix_socket: /run/mysqld/mysqld.sock
+  when: database_name is defined and database_user is defined and database_password is defined
+
+#- name: Removes anonymous user account for localhost
+#  community.mysql.mysql_user:
+#    name: ''
+#    host: localhost
+#    state: absent
+#    login_unix_socket: /run/mysqld/mysqld.sock

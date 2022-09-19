@@ -9,11 +9,17 @@ resource "local_file" "inventory" {
     [nodesinside:children]
     mysql
 
+    [mysql:children]
+    mysql_master
+    mysql_slave
+
     [nginx]
     ${yandex_compute_instance.nginx.hostname} ansible_host=${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}
 
-    [mysql]
+    [mysql_master]
     ${yandex_compute_instance.db01.hostname} ansible_host=${yandex_compute_instance.db01.network_interface.0.nat_ip_address}
+
+    [mysql_slave]
     ${yandex_compute_instance.db02.hostname} ansible_host=${yandex_compute_instance.db02.network_interface.0.nat_ip_address}
 
     # [nodesinside:vars]

@@ -16,6 +16,12 @@ data "yandex_dns_zone" "zone" {
   name = "eladminru"
 }
 
+variable "dns_zone" {
+  default = {
+    dns_zone = "eladmin.ru"
+  }
+}
+
 variable "services" {
   default = {
     www = "www"
@@ -23,5 +29,13 @@ variable "services" {
     grafana = "grafana"
     prometheus = "prometheus"
     alertmanager = "alertmanager"
+  }
+}
+
+variable "database" {
+  default = {
+    database_name = "wordpress"
+    database_user = "wordpress"
+    database_password = "wordpress"
   }
 }
