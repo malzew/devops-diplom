@@ -29,8 +29,8 @@ then
   exit 1
 fi
 
-yc dns zone add-records --name $DNS_ZONE_NAME --record "$DNS_ZONE_RECORD 120 $DNS_ZONE_RECORD_TYPE $IP_ADDR" 2>/dev/null
+yc dns zone add-records --name $DNS_ZONE_NAME --record "$DNS_ZONE_RECORD 300 $DNS_ZONE_RECORD_TYPE $IP_ADDR" 2>/dev/null
 
-yc dns zone replace-records --name $DNS_ZONE_NAME --record "$DNS_ZONE_RECORD 120 $DNS_ZONE_RECORD_TYPE $IP_ADDR" 2>/dev/null
+yc dns zone replace-records --name $DNS_ZONE_NAME --record "$DNS_ZONE_RECORD 300 $DNS_ZONE_RECORD_TYPE $IP_ADDR" 2>/dev/null
 
 exit 0

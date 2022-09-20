@@ -1,5 +1,5 @@
 ---
-- name: Install of Requrements Tools
+- name: Install of requirements tools
   hosts: mysql
   become: yes
   become_user: root

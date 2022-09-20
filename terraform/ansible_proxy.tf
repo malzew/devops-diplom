@@ -1,12 +1,3 @@
-resource "null_resource" "wait" {
-  provisioner "local-exec" {
-    command = "sleep 100"
-  }
-
-  depends_on = [
-    local_file.inventory
-  ]
-}
 
 # Reverse proxy
 resource "null_resource" "proxy" {
@@ -47,7 +38,6 @@ resource "null_resource" "create_proxy_config" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${local.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=localhost:8080 default_conf_file=default.conf'"
   }
-  # for_each = var.services
 
   depends_on = [
     null_resource.get_letsencrypt_services,

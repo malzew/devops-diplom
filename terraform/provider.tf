@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     endpoint   = "storage.yandexcloud.net"
-    bucket     = "amalzew-netology"
+    bucket     = "amalzew-netology" # From yandex cloud
     region     = "ru-central1"
     key        = "diplom/terraform.tfstate"
 
@@ -19,7 +19,7 @@ terraform {
 
 provider "yandex" {
   service_account_key_file = "key.json"
-  cloud_id  = "b1g2n2okvr289487oale"
-  folder_id = "b1gg33hbpnn7at4oorel"
+  cloud_id  = "b1g2n2okvr289487oale" # From yandex cloud
+  folder_id = "b1gg33hbpnn7at4oorel" # From yandex cloud
   zone      = "ru-central1-a"
 }

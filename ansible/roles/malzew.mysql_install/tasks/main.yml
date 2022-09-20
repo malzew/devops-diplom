@@ -7,6 +7,6 @@
     update_cache: true
 
 - name: Make sure pymysql is present
-  pip:
+  ansible.builtin.pip:
     name: pymysql
     state: present
