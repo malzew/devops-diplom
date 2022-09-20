@@ -1,5 +1,5 @@
 ---
-- name: "Create proxy server config file from j2 template"
+- name: "Create proxy server config file from j2 templates"
   ansible.builtin.template:
     src: nginx.conf.j2
     dest: "{{ conf_dir }}/{{ domain_name }}.conf"

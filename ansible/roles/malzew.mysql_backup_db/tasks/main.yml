@@ -1,0 +1,14 @@
+---
+- name: Create temporary backup directory
+  tempfile:
+    state: directory
+    prefix: ansible-
+    suffix: .mysqlslave
+  register: backupdir
+
+- name: Dump database '{{ database_name }}'
+  shell: >-
+    innobackupex --no-timestamp {{ backupdir.path }}/dump 2>&1 | tail -n 1
+  register: innobackupex
+  failed_when: '"completed OK!" not in innobackupex.stdout'
+

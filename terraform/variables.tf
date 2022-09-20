@@ -9,7 +9,7 @@ locals {
 
 # Образ берем стандартный, предоставляемый Яндексом, по семейству
 data "yandex_compute_image" "ubuntu" {
-  family = "ubuntu-2204-lts"
+  family = "ubuntu-2004-lts"
 }
 
 data "yandex_dns_zone" "zone" {

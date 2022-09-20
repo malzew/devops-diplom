@@ -1,40 +1,9 @@
 ---
-- name: Set 'bind-address' variable to '{{ bind-address }}' persistently
-  community.mysql.mysql_variables:
-    variable: "bind-address"
-    value: "{{ bind-address }}"
-    mode: persist
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: bind-address is defined
-
-- name: Set 'server_id' variable to '{{ server_id }}' persistently
-  community.mysql.mysql_variables:
-    variable: "server_id"
-    value: "{{ server_id }}"
-    mode: persist
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: server_id is defined
-
-- name: Set 'log_bin' variable to '{{ log_bin }}' persistently
-  community.mysql.mysql_variables:
-    variable: "log_bin"
-    value: "{{ log_bin }}"
-    mode: persist
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: log_bin is defined
-
-- name: Set 'binlog_do_db' variable to '{{ binlog_do_db }}' persistently
-  community.mysql.mysql_variables:
-    variable: "binlog_do_db"
-    value: "{{ binlog_do_db }}"
-    mode: persist
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: binlog_do_db is defined
-
-- name: Set 'relay-log' variable to '{{ relay-log }}' persistently
-  community.mysql.mysql_variables:
-    variable: "relay-log"
-    value: "{{ relay-log }}"
-    mode: persist
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: relay-log is defined
+- name: "Create MySQL server config file from j2 template"
+  ansible.builtin.template:
+    src: mysqld.cnf.j2
+    dest: "{{ conf_file }}"
+    owner: mysql
+    group: mysql
+    mode: 0644
+  when: conf_file is defined and bind_address is defined and server_id is defined and binlog_do_db is defined
