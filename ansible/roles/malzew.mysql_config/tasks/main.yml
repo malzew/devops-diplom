@@ -31,10 +31,10 @@
     login_unix_socket: /var/run/mysqld/mysqld.sock
   when: binlog_do_db is defined
 
-- name: Set 'binlog_do_db' variable to '{{ binlog_do_db }}' persistently
+- name: Set 'relay-log' variable to '{{ relay-log }}' persistently
   community.mysql.mysql_variables:
-    variable: "binlog_do_db"
-    value: "{{ binlog_do_db }}"
+    variable: "relay-log"
+    value: "{{ relay-log }}"
     mode: persist
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: binlog_do_db is defined
+  when: relay-log is defined
