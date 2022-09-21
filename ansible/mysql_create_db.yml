@@ -1,6 +1,6 @@
 ---
 - name: MySQL create database '{{ database_name }}' and user, if defined
-  hosts: mysql_master
+  hosts: mysql
   become: yes
   become_user: root
   remote_user: ubuntu

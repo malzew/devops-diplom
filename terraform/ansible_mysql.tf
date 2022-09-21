@@ -37,3 +37,23 @@ resource "null_resource" "mysql_config_slave" {
     null_resource.mysql_create_db
   ]
 }
+
+resource "null_resource" "mysql_replication_master" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/mysql_replication.yml --extra-vars 'mysql_hosts=mysql_master mysql_replication_role=master mysql_replication_master=${yandex_compute_instance.db01.network_interface[0].ip_address} database_user=${var.database.database_user} database_password=${var.database.database_password} database_name=${var.database.database_name}'"
+  }
+
+  depends_on = [
+    null_resource.mysql_config_master
+  ]
+}
+
+resource "null_resource" "mysql_replication_slave" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/mysql_replication.yml --extra-vars 'mysql_hosts=mysql_slave mysql_replication_role=slave mysql_replication_master=${yandex_compute_instance.db01.network_interface[0].ip_address} database_user=${var.database.database_user} database_password=${var.database.database_password} database_name=${var.database.database_name}'"
+  }
+
+  depends_on = [
+    null_resource.mysql_config_master
+  ]
+}

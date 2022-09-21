@@ -1,0 +1,22 @@
+---
+- name: MySQL enable replication
+  hosts: "{{ mysql_hosts }}"
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.mysql_replication
+    vars:
+      mysql_root_username: root
+      mysql_root_password: ""
+      mysql_replication_user:
+        - name: "{{ database_user }}"
+          host: "%"
+          password: "{{ database_password }}"
+          priv: "{{ database_name }}.*:ALL"
+    when:
+      - mysql_hosts is defined
+      - mysql_replication_role is defined
+      - mysql_replication_master is defined
+      - database_user is defined
+      - database_password is defined
