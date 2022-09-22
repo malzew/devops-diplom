@@ -1,8 +1,8 @@
-resource "yandex_compute_instance" "app" {
-  name        = "app"
+resource "yandex_compute_instance" "runner" {
+  name        = "runner"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
-  hostname    = "app.${var.dns_zone}"
+  hostname    = "runner.${var.dns_zone}"
 
   # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
@@ -15,7 +15,7 @@ resource "yandex_compute_instance" "app" {
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.id
-      type = "network-hdd"
+      type = "network-ssd"
       size = "20"
     }
   }
@@ -28,6 +28,7 @@ resource "yandex_compute_instance" "app" {
     # create_before_destroy = true
   }
 
+  # Создаем сетевой интерфейс у ВМ, с адресом из ранее созданной подсети и NAT, чтобы был доступ из инета
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a.id
     nat = "false"
@@ -39,7 +40,6 @@ resource "yandex_compute_instance" "app" {
   }
 }
 
-output "internal_ip_address_app" {
-  value = yandex_compute_instance.app.network_interface[0].ip_address
+output "internal_ip_address_runner" {
+  value = yandex_compute_instance.runner.network_interface[0].ip_address
 }
-

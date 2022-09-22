@@ -1,0 +1,16 @@
+---
+- name: Install of requirements tools
+  hosts: runner
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.install_tools
+
+- name: Install GitLab Runner
+  hosts: runner
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.runner_install

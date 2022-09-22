@@ -23,11 +23,11 @@ variable "dns_zone" {
 
 variable "services" {
   default = {
-    www = "www"
+    www = "app"
     gitlab = "gitlab"
-    grafana = "grafana"
-    prometheus = "prometheus"
-    alertmanager = "alertmanager"
+    grafana = "monitoring"
+    prometheus = "monitoring"
+    alertmanager = "monitoring"
   }
 }
 

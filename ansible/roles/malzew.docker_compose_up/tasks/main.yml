@@ -1,13 +1,24 @@
 ---
-- name: Copy docker-compose
-  ansible.builtin.copy:
-    src: "{{ docker_compose_src_dir }}/"
-    dest: "{{ docker_compose_src_dir }}"
-    mode: 0644
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ docker_compose_src_dir }}"
+    state: directory
+    mode: '0755'
   when: docker_compose_src_dir is defined
+
+- name: Create docker compose file from j2 template
+  ansible.builtin.template:
+    src: "{{ docker_compose_template }}"
+    dest: "{{ docker_compose_src_dir }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - domain_name is defined
+    - docker_compose_template is defined
+    - docker_compose_src_dir is defined
 
 - name: Create and start services
   community.docker.docker_compose:
     project_src: "{{ docker_compose_src_dir }}"
-  register: output
   when: docker_compose_src_dir is defined

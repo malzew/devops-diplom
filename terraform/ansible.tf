@@ -12,6 +12,9 @@ resource "local_file" "inventory" {
     [nodesinside:children]
     mysql
     app
+    gitlab
+    runner
+    monitoring
 
     [mysql:children]
     mysql_master
@@ -29,6 +32,15 @@ resource "local_file" "inventory" {
     [app]
     ${yandex_compute_instance.app.hostname} ansible_host=${yandex_compute_instance.app.network_interface.0.ip_address}
 
+    [gitlab]
+    ${yandex_compute_instance.gitlab.hostname} ansible_host=${yandex_compute_instance.gitlab.network_interface.0.ip_address}
+
+    [runner]
+    ${yandex_compute_instance.runner.hostname} ansible_host=${yandex_compute_instance.runner.network_interface.0.ip_address}
+
+    [monitoring]
+    ${yandex_compute_instance.monitoring.hostname} ansible_host=${yandex_compute_instance.monitoring.network_interface.0.ip_address}
+
     [nodesinside:vars]
     ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q ${var.username}@${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}"'
 
@@ -40,6 +52,9 @@ resource "local_file" "inventory" {
     yandex_compute_instance.nginx,
     yandex_compute_instance.db01,
     yandex_compute_instance.db02,
+    yandex_compute_instance.gitlab,
+    yandex_compute_instance.runner,
+    yandex_compute_instance.monitoring,
     yandex_compute_instance.app
   ]
 }

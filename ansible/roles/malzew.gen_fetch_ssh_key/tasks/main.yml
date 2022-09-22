@@ -24,7 +24,7 @@
     - username != "root"
     - destfile is defined
 
-- name: Specifying a destination path
+- name: Fetch public key
   ansible.builtin.fetch:
     src: "{{ username }}/.ssh/id_rsa.pub"
     dest: "{{ destfile }}"

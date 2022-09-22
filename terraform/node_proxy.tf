@@ -28,12 +28,6 @@ resource "yandex_compute_instance" "nginx" {
     # create_before_destroy = true
   }
 
-  # Создаем сетевой интерфейс у ВМ, с адресом из ранее созданной подсети и NAT, чтобы был доступ из инета
-#  network_interface {
-#    subnet_id = yandex_vpc_subnet.subnet_zone_a_dmz.id
-#    nat = "true"
-#  }
-
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a_dmz.id
     nat = "true"
@@ -43,4 +37,12 @@ resource "yandex_compute_instance" "nginx" {
   metadata = {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
+}
+
+output "external_ip_address_ngnix" {
+  value = yandex_compute_instance.nginx.network_interface[0].nat_ip_address
+}
+
+output "internal_ip_address_nginx" {
+  value = yandex_compute_instance.nginx.network_interface[0].ip_address
 }

@@ -1,0 +1,24 @@
+---
+- name: Install of requirements tools
+  hosts: gitlab
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.install_tools
+
+- name: Install docker
+  hosts: gitlab
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.docker_install
+
+- name: Install Gitlab-CE in docker
+  hosts: gitlab
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.docker_compose_up

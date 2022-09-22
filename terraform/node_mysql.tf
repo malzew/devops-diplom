@@ -75,3 +75,11 @@ resource "yandex_compute_instance" "db02" {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 }
+
+output "internal_ip_address_db01" {
+  value = yandex_compute_instance.db01.network_interface[0].ip_address
+}
+
+output "internal_ip_address_db02" {
+  value = yandex_compute_instance.db02.network_interface[0].ip_address
+}

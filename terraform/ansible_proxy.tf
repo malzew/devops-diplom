@@ -46,7 +46,7 @@ resource "null_resource" "get_letsencrypt_services" {
 
 resource "null_resource" "create_proxy_config" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=localhost:8080 default_conf_file=default.conf'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=app.${var.dns_zone} default_conf_file=default.conf'"
   }
 
   depends_on = [
@@ -57,7 +57,7 @@ resource "null_resource" "create_proxy_config" {
 
 resource "null_resource" "create_proxy_config_services" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=localhost:8080'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=${each.value}.${var.dns_zone}'"
   }
   for_each = var.services
 
