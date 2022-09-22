@@ -30,7 +30,7 @@ resource "local_file" "inventory" {
     ${yandex_compute_instance.app.hostname} ansible_host=${yandex_compute_instance.app.network_interface.0.ip_address}
 
     [nodesinside:vars]
-    ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ${var.username}@${var.dns_zone}"'
+    ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q ${var.username}@${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}"'
 
     DOC
   filename = "../ansible/inventory"
@@ -43,6 +43,17 @@ resource "local_file" "inventory" {
     yandex_compute_instance.app
   ]
 }
+
+resource "null_resource" "clear_local_ssh_keys" {
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}"
+  }
+
+  depends_on = [
+    local_file.inventory
+  ]
+}
+
 #
 # Delay waiting for VM up
 #

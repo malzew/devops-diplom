@@ -34,7 +34,8 @@ resource "null_resource" "mysql_create_db" {
   }
 
   depends_on = [
-    null_resource.mysql_install
+    null_resource.mysql_config_master,
+    null_resource.mysql_config_slave
   ]
 }
 
@@ -54,6 +55,6 @@ resource "null_resource" "mysql_replication_slave" {
   }
 
   depends_on = [
-    null_resource.mysql_create_db
+    null_resource.mysql_replication_master
   ]
 }
