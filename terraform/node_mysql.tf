@@ -2,7 +2,7 @@ resource "yandex_compute_instance" "db01" {
   name        = "db01"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
-  hostname    = "db01.${local.dns_zone}"
+  hostname    = "db01.${var.dns_zone}"
 
   # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
@@ -28,7 +28,7 @@ resource "yandex_compute_instance" "db01" {
   # Создаем сетевой интерфейс у ВМ, с адресом из ранее созданной подсети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a.id
-      nat = "true"
+      nat = "false"
   }
 
   # Передаем свои SSH ключи для авторизации
@@ -41,7 +41,7 @@ resource "yandex_compute_instance" "db02" {
   name        = "db02"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
-  hostname    = "db02.${local.dns_zone}"
+  hostname    = "db02.${var.dns_zone}"
 
   # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
@@ -67,7 +67,7 @@ resource "yandex_compute_instance" "db02" {
   # Создаем сетевой интерфейс у ВМ, с адресом из ранее созданной подсети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a.id
-      nat = "true"
+      nat = "false"
   }
 
   # Передаем свои SSH ключи для авторизации

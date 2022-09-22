@@ -1,0 +1,12 @@
+---
+- name: Generate an OpenSSH keypair for '{{ username }}' on proxy
+  hosts: nginx
+  remote_user: ubuntu
+  roles:
+  - role: malzew.gen_fetch_ssh_key
+
+- name: Copy ssh key from proxy to inside nodes
+  hosts: nodesinside
+  remote_user: ubuntu
+  roles:
+  - role: malzew.copy_ssh_key

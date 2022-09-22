@@ -1,15 +1,15 @@
-locals {
-  dns_zone = "eladmin.ru"
-
-#  node_instance_type_map = {
-#    stage = "standard-v1"
-#    prod  = "standard-v2"
-#  }
-}
-
 # Образ берем стандартный, предоставляемый Яндексом, по семейству
 data "yandex_compute_image" "ubuntu" {
   family = "ubuntu-2004-lts"
+}
+
+variable "username" {
+  type = string
+  default = "ubuntu"
+}
+
+data "yandex_compute_image" "nat_instance" {
+  family = "nat-instance-ubuntu"
 }
 
 data "yandex_dns_zone" "zone" {
@@ -17,9 +17,8 @@ data "yandex_dns_zone" "zone" {
 }
 
 variable "dns_zone" {
-  default = {
-    dns_zone = "eladmin.ru"
-  }
+  type = string
+  default = "eladmin.ru"
 }
 
 variable "services" {

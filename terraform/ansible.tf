@@ -11,6 +11,7 @@ resource "local_file" "inventory" {
 
     [nodesinside:children]
     mysql
+    app
 
     [mysql:children]
     mysql_master
@@ -20,21 +21,26 @@ resource "local_file" "inventory" {
     ${yandex_compute_instance.nginx.hostname} ansible_host=${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}
 
     [mysql_master]
-    ${yandex_compute_instance.db01.hostname} ansible_host=${yandex_compute_instance.db01.network_interface.0.nat_ip_address}
+    ${yandex_compute_instance.db01.hostname} ansible_host=${yandex_compute_instance.db01.network_interface.0.ip_address}
 
     [mysql_slave]
-    ${yandex_compute_instance.db02.hostname} ansible_host=${yandex_compute_instance.db02.network_interface.0.nat_ip_address}
+    ${yandex_compute_instance.db02.hostname} ansible_host=${yandex_compute_instance.db02.network_interface.0.ip_address}
 
-    # [nodesinside:vars]
-    # ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ubuntu@${yandex_compute_instance.nginx.hostname}"'
+    [app]
+    ${yandex_compute_instance.app.hostname} ansible_host=${yandex_compute_instance.app.network_interface.0.ip_address}
+
+    [nodesinside:vars]
+    ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q ${var.username}@${var.dns_zone}"'
 
     DOC
   filename = "../ansible/inventory"
+  file_permission = "0644"
 
   depends_on = [
     yandex_compute_instance.nginx,
     yandex_compute_instance.db01,
-    yandex_compute_instance.db02
+    yandex_compute_instance.db02,
+    yandex_compute_instance.app
   ]
 }
 #

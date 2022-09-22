@@ -1,0 +1,16 @@
+---
+- name: Install of requirements tools
+  hosts: app
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.install_tools
+
+- name: Install docker
+  hosts: app
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.docker_install

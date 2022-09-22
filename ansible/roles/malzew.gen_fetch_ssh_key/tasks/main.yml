@@ -1,0 +1,35 @@
+---
+
+- name: Generate an OpenSSH keypair for user '{{ username }}' with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: "/home/{{ username }}/.ssh/id_rsa"
+  when:
+    - username is defined
+    - username != "root"
+
+- name: Generate an OpenSSH keypair for user '{{ username }}' with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: "{{ username }}/.ssh/"
+  when:
+    - username is defined
+    - username == "root"
+
+- name: Fetch public key
+  ansible.builtin.fetch:
+    src: "/home/{{ username }}/.ssh/id_rsa.pub"
+    dest: "{{ destfile }}"
+    flat: yes
+  when:
+    - username is defined
+    - username != "root"
+    - destfile is defined
+
+- name: Specifying a destination path
+  ansible.builtin.fetch:
+    src: "{{ username }}/.ssh/id_rsa.pub"
+    dest: "{{ destfile }}"
+    flat: yes
+  when:
+    - username is defined
+    - username == "root"
+    - destfile is defined

@@ -1,0 +1,13 @@
+---
+
+- name: Set authorized ssh key taken from file
+  ansible.posix.authorized_key:
+    user: "{{ username }}"
+    state: present
+    key: "{{ lookup('file', '{{ srcfile }}') }}"
+
+- name: Remove local file
+  ansible.builtin.file:
+    path: "{{ srcfile }}"
+    state: absent
+  delegate_to: localhost

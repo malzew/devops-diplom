@@ -1,18 +1,8 @@
-
+/*
 # Reverse proxy
 resource "null_resource" "proxy" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_install.yml"
-  }
-
-  depends_on = [
-    null_resource.wait
-  ]
-}
-
-resource "null_resource" "proxy_ssh" {
-  provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_ssh.yml --extra-vars 'username=${var.username} destfile=id_rsa.pub srcfile=id_rsa.pub'"
   }
 
   depends_on = [
@@ -28,19 +18,19 @@ resource "null_resource" "get_letsencrypt" {
 
   depends_on = [
     null_resource.proxy,
-    yandex_dns_recordset.records
+    null_resource.dns_record_create_app
   ]
 }
 
 resource "null_resource" "get_letsencrypt_services" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/letsencrypt.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone}'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/letsencrypt.yml --extra-vars 'domain_name=${each.value}.${var.dns_zone}'"
   }
   for_each = var.services
 
   depends_on = [
     null_resource.proxy,
-    yandex_dns_recordset.records
+    null_resource.dns_record_create_app
   ]
 }
 
@@ -57,7 +47,7 @@ resource "null_resource" "create_proxy_config" {
 
 resource "null_resource" "create_proxy_config_services" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=localhost:8080'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.value}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=localhost:8080'"
   }
   for_each = var.services
 
@@ -78,3 +68,4 @@ resource "null_resource" "proxy_restart" {
   ]
 }
 
+*/

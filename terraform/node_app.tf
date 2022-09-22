@@ -1,20 +1,20 @@
-resource "yandex_compute_instance" "nginx" {
-  name        = "nginx"
+resource "yandex_compute_instance" "app" {
+  name        = "app"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
-  hostname    = "nginx.${var.dns_zone}"
+  hostname    = "app.${var.dns_zone}"
 
   # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
-    cores  = 2
-    memory = 2
+    cores  = 4
+    memory = 4
     core_fraction = 100
   }
 
-  # Загрузочный диск из образа NAT instance, на HDD, 20Gb
+  # Загрузочный диск из стандартного образа, на SSD, 40Gb
   boot_disk {
     initialize_params {
-      image_id = data.yandex_compute_image.nat_instance.id
+      image_id = data.yandex_compute_image.ubuntu.id
       type = "network-hdd"
       size = "20"
     }
@@ -35,8 +35,8 @@ resource "yandex_compute_instance" "nginx" {
 #  }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet_zone_a_dmz.id
-    nat = "true"
+    subnet_id = yandex_vpc_subnet.subnet_zone_a.id
+    nat = "false"
   }
 
   # Передаем свои SSH ключи для авторизации
