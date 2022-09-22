@@ -2,37 +2,33 @@
 - name: Ensure replication user exists on master.
   mysql_user:
     name: "{{ mysql_replication_user.name }}"
-    host: "{{ mysql_replication_user.host | default('%') }}"
+    host: "{{ mysql_replication_user.host }}"
     password: "{{ mysql_replication_user.password }}"
-    priv: "{{ mysql_replication_user.priv | default('*.*:REPLICATION SLAVE,REPLICATION CLIENT') }}"
+    priv: "{{ mysql_replication_user.priv }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: present
   when:
     - mysql_replication_role == 'master'
-    - mysql_replication_user.name is defined
-    - (mysql_replication_master | length) > 0
+    - mysql_replication_user is defined
 
 - name: Check slave replication status.
   mysql_replication:
     mode: getreplica
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_root_password }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-#  ignore_errors: true
   register: slave
   when:
     - mysql_replication_role == 'slave'
-    - (mysql_replication_master | length) > 0
+    - mysql_replication_master is defined
 
 - name: Check master replication status.
   mysql_replication:
     mode: getprimary
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  delegate_to: "{{ mysql_replication_master }}"
+  delegate_to: "{{ mysql_replication_master_ext }}"
   register: master
   when:
-    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
-    - (mysql_replication_master | length) > 0
+    - mysql_replication_master is defined
 
 - name: Configure replication on the slave.
   mysql_replication:
@@ -43,18 +39,15 @@
     primary_log_file: "{{ master.File }}"
     primary_log_pos: "{{ master.Position }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-#  ignore_errors: true
   when:
-    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
-    - mysql_replication_user.name is defined
-    - (mysql_replication_master | length) > 0
+    - mysql_replication_user is defined
+    - mysql_replication_master is defined
 
 - name: Start replication.
   mysql_replication:
     mode: startreplica
     login_unix_socket: /var/run/mysqld/mysqld.sock
   when:
-    - (slave.Is_Slave is defined and not slave.Is_Slave) or (slave.Is_Slave is not defined and slave is failed)
     - mysql_replication_role == 'slave'
-    - (mysql_replication_master | length) > 0
+    - mysql_replication_master is defined

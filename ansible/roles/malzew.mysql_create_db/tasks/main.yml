@@ -10,7 +10,7 @@
   community.mysql.mysql_user:
     name: "{{ database_user }}"
     password: "{{ database_password }}"
-    priv: "{{ database_name }}.*:ALL"
+    priv: "*.*:ALL"
     host: "%"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock

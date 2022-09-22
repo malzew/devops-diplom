@@ -8,12 +8,11 @@
   - role: malzew.mysql_replication
     vars:
       mysql_root_username: root
-      mysql_root_password: ""
       mysql_replication_user:
-        - name: "{{ database_user }}"
-          host: "%"
-          password: "{{ database_password }}"
-          priv: "{{ database_name }}.*:ALL"
+        name: "{{ database_user }}"
+        host: "%"
+        password: "{{ database_password }}"
+        priv: "*.*:ALL"
     when:
       - mysql_hosts is defined
       - mysql_replication_role is defined

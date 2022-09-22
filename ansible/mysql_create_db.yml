@@ -1,9 +1,11 @@
 ---
 - name: MySQL create database '{{ database_name }}' and user, if defined
-  hosts: mysql
+  hosts: "{{ mysql_hosts }}"
   become: yes
   become_user: root
   remote_user: ubuntu
   roles:
   - role: malzew.mysql_create_db
-    when: database_name is defined
+    when:
+      - database_name is defined
+      - mysql_hosts is defined
