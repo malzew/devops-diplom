@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+gitlab-runner register \
+  --non-interactive \
+  --url "http://{{ domain_name }}/" \
+  --registration-token "{{ registration_token }}" \
+  --executor "docker" \
+  --docker-image alpine:latest \
+  --description "docker-runner" \
+  --maintenance-note "GitLab Runner" \
+  --tag-list "docker" \
+  --run-untagged="true" \
+  --locked="false" \
+  --access-level="not_protected" \
+  --leave-runner

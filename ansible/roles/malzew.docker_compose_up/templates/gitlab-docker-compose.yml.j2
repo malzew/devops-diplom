@@ -3,7 +3,7 @@ services:
   web:
     image: 'gitlab/gitlab-ce:latest'
     restart: always
-    hostname: 'https://{{ domain_name }}'
+    hostname: '{{ domain_name }}'
     environment:
       GITLAB_ROOT_PASSWORD: wordpress
       GITLAB_OMNIBUS_CONFIG: |

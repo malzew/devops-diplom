@@ -7,6 +7,14 @@
   roles:
   - role: malzew.install_tools
 
+- name: Install docker
+  hosts: runner
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.docker_install
+
 - name: Install GitLab Runner
   hosts: runner
   become: yes
