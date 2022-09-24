@@ -8,6 +8,7 @@ resource "local_file" "inventory" {
 
     [nodes:children]
     nginx
+    nodesinside
 
     [nodesinside:children]
     mysql

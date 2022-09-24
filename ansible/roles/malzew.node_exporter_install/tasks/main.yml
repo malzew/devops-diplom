@@ -1,0 +1,57 @@
+---
+- name: Create the node_exporter group
+  ansible.builtin.group:
+    name: node_exporter
+    state: present
+    system: true
+
+- name: Create the node_exporter user
+  ansible.builtin.user:
+    name: node_exporter
+    groups: node_exporter
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+    home: /
+
+- name: Download node_exporter binary
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz"
+    dest: "/tmp/node_exporter-1.3.1.linux-amd64.tar.gz"
+    mode: 0644
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+
+- name: Unpack node_exporter binary
+  ansible.builtin.unarchive:
+    src: "/tmp/node_exporter-1.3.1.linux-amd64.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
+    creates: "/tmp/node_exporter-1.3.1.linux-amd64/node_exporter"
+
+- name: Copy node_exporter binary file on the remote machine
+  ansible.builtin.copy:
+    src: "/tmp/node_exporter-1.3.1.linux-amd64/node_exporter"
+    dest: "/usr/local/bin/node_exporter"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Create node_exporter.service file from j2 template
+  ansible.builtin.template:
+    src: "node_exporter.service.j2"
+    dest: "/etc/systemd/system/node_exporter.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Make sure a service node_exporter is running
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: node_exporter

@@ -1,0 +1,81 @@
+---
+- name: Create the prometheus group
+  ansible.builtin.group:
+    name: prometheus
+    state: present
+    system: true
+
+- name: Create the prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    groups: prometheus
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+    home: /
+
+- name: Download prometheus binary
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v2.37.1/prometheus-2.37.1.linux-amd64.tar.gz"
+    dest: "/tmp/prometheus-2.37.1.linux-amd64.tar.gz"
+    mode: 0644
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+
+- name: Unpack prometheus binary
+  ansible.builtin.unarchive:
+    src: "/tmp/prometheus-2.37.1.linux-amd64.tar.gz"
+    dest: "/tmp"
+    creates: "/tmp/prometheus-2.37.1.linux-amd64/prometheus"
+    remote_src: yes
+
+- name: Copy prometheus binary file on the remote machine
+  ansible.builtin.copy:
+    src: "/tmp/prometheus-2.37.1.linux-amd64/prometheus"
+    dest: "/usr/local/bin/prometheus"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Create a directory /etc/prometheus if it does not exist
+  ansible.builtin.file:
+    path: "/etc/prometheus"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create /etc/prometheus/prometheus.yml file from j2 template
+  ansible.builtin.template:
+    src: "prometheus.yml.j2"
+    dest: "/etc/prometheus/prometheus.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create a directory /var/lib/prometheus if it does not exist
+  ansible.builtin.file:
+    path: "/var/lib/prometheus"
+    state: directory
+    mode: 0755
+    owner: prometheus
+    group: prometheus
+
+- name: Create node_exporter.service file from j2 template
+  ansible.builtin.template:
+    src: "prometheus.service.j2"
+    dest: "/etc/systemd/system/prometheus.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Make sure a service prometheus is running
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: prometheus

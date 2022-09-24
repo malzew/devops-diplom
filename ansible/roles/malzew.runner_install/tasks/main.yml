@@ -1,6 +1,16 @@
 ---
+- name: Download node_exporter binary
+  ansible.builtin.get_url:
+    url: "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh"
+    dest: "/tmp/script.deb.sh"
+    mode: 0755
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+
 - name: Add apt repository for GitLab Runner
-  ansible.builtin.shell: "curl -L \"https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh\" | sudo bash"
+  ansible.builtin.shell: "/tmp/script.deb.sh"
   args:
     executable: /bin/bash
 
@@ -21,10 +31,10 @@
   when:
     - domain_name is defined
 
-- name: Register GitLab Runner
-  ansible.builtin.shell: "./gitlab-runner-register"
-  args:
-    executable: /bin/bash
-  when:
-    - registration_token is defined
-    - domain_name is defined
+#- name: Register GitLab Runner
+#  ansible.builtin.shell: "./gitlab-runner-register"
+#  args:
+#    executable: /bin/bash
+#  when:
+#    - registration_token is defined
+#    - domain_name is defined
