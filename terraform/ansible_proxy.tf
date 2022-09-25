@@ -16,7 +16,17 @@ resource "null_resource" "proxy_ssh" {
   }
 
   depends_on = [
-    null_resource.wait
+    null_resource.proxy
+  ]
+}
+
+resource "null_resource" "proxy_firewall" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_firewall.yml"
+  }
+
+  depends_on = [
+    null_resource.proxy
   ]
 }
 
@@ -57,7 +67,7 @@ resource "null_resource" "create_proxy_config" {
 
 resource "null_resource" "create_proxy_config_services" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=${each.value}.${var.dns_zone}'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${each.key}.${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=${each.value}'"
   }
   for_each = var.services
 

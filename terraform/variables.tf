@@ -8,9 +8,9 @@ variable "username" {
   default = "ubuntu"
 }
 
-data "yandex_compute_image" "nat_instance" {
+/*data "yandex_compute_image" "nat_instance" {
   family = "nat-instance-ubuntu"
-}
+}*/
 
 data "yandex_dns_zone" "zone" {
   name = "eladminru"
@@ -25,9 +25,20 @@ variable "services" {
   default = {
     www = "app"
     gitlab = "gitlab"
-    grafana = "monitoring"
-    prometheus = "monitoring"
-    alertmanager = "monitoring"
+    grafana = "monitoring:3000"
+    prometheus = "monitoring:9090"
+    alertmanager = "monitoring:9093"
+  }
+}
+
+variable "monitoring" {
+  default = {
+    nginx = "nginx"
+    www = "app"
+    gitlab = "gitlab"
+    grafana = "grafana"
+    prometheus = "prometheus"
+    alertmanager = "alertmanager"
   }
 }
 

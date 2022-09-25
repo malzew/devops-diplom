@@ -1,0 +1,9 @@
+---
+- name: Create proxy server config files
+  hosts: monitoring
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.prometheus_add_config
+    when: monitoring_target is defined

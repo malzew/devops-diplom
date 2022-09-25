@@ -4,6 +4,6 @@ resource "null_resource" "runner_install" {
   }
 
   depends_on = [
-    null_resource.wait
+    null_resource.proxy_firewall
   ]
 }

@@ -30,11 +30,10 @@
     mode: 0755
   when:
     - domain_name is defined
-
-#- name: Register GitLab Runner
-#  ansible.builtin.shell: "./gitlab-runner-register"
-#  args:
-#    executable: /bin/bash
-#  when:
-#    - registration_token is defined
-#    - domain_name is defined
+#  - name: Register GitLab Runner
+#    ansible.builtin.shell: "./gitlab-runner-register"
+#    args:
+#      executable: /bin/bash
+#    when:
+#      - registration_token is defined
+#      - domain_name is defined

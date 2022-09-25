@@ -11,10 +11,10 @@ resource "yandex_compute_instance" "nginx" {
     core_fraction = 100
   }
 
-  # Загрузочный диск из образа NAT instance, на HDD, 20Gb
+  # Загрузочный диск из образа Ubuntu, на HDD, 20Gb
   boot_disk {
     initialize_params {
-      image_id = data.yandex_compute_image.nat_instance.id
+      image_id = data.yandex_compute_image.ubuntu.id
       type = "network-hdd"
       size = "20"
     }

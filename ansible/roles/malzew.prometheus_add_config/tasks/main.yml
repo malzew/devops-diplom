@@ -1,0 +1,21 @@
+---
+- name: Create /etc/prometheus/prometheus.yml.append file from j2 template
+  ansible.builtin.template:
+    src: "prometheus.yml.append.j2"
+    dest: "/etc/prometheus/prometheus.yml.append"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Assemble prometheus.yml from fragments
+  ansible.builtin.assemble:
+    src: "/etc/prometheus"
+    dest: "/etc/prometheus/prometheus.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart service prometheus
+  ansible.builtin.systemd:
+    state: restarted
+    name: prometheus

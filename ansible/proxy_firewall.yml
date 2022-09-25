@@ -5,4 +5,4 @@
   become_user: root
   remote_user: ubuntu
   roles:
-  - role: malzew.proxy_add_nat
+  - role: malzew.proxy_firewall

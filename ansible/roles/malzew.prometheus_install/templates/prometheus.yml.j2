@@ -1,11 +1,16 @@
 global:
   scrape_interval: 15s
-  scrape_configs:
-    - job_name: 'prometheus'
-      scrape_interval: 5s
-      static_configs:
-        - targets: ['localhost:9090']
-    - job_name: 'prometheus_node'
-      scrape_interval: 5s
-      static_configs:
-        - targets: ['localhost:9100']
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['localhost:9093']
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'prometheus_node'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9100']

@@ -4,7 +4,7 @@ resource "null_resource" "mysql_install" {
   }
 
   depends_on = [
-    null_resource.wait
+    null_resource.proxy_firewall
   ]
 }
 

@@ -1,0 +1,50 @@
+---
+- name: Configuration IP forwarding
+  become: true
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+
+- name: Add ufw before content
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/ufw/before.rules
+    insertbefore: BOF
+    content: |
+      # NAT table rules
+      *nat
+      :POSTROUTING ACCEPT [0:0]
+      -A POSTROUTING -s 10.0.0.0/8 -j MASQUERADE
+      -A POSTROUTING -s 172.16.0.0/12 -j MASQUERADE
+      -A POSTROUTING -s 192.168.0.0/16 -j MASQUERADE
+      COMMIT
+- name: Customize ufw forwarding policy
+  become: true
+  ansible.builtin.lineinfile:
+    line: "DEFAULT_FORWARD_POLICY=\"ACCEPT\""
+    path: "/etc/default/ufw"
+    regexp: "^DEFAULT_FORWARD_POLICY=\"DROP\""
+
+- name: Allow access to this host from any
+  community.general.ufw:
+    rule: allow
+    port: '{{ item }}'
+  loop:
+    - 22
+    - 80
+    - 443
+
+- name: Allow all access from RFC1918 networks to this host
+  community.general.ufw:
+    rule: allow
+    src: '{{ item }}'
+  loop:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+
+- name: Deny everything by default and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny
