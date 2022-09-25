@@ -1,14 +1,4 @@
 ---
-#  - name: Add the MySQL GPG Public key
-#    ansible.builtin.apt_key:
-#      keyserver: pgp.mit.edu
-#      id: 3A79BD29
-#
-#  - name: Add apt MySQL repository
-#    ansible.builtin.apt_repository:
-#      repo: "deb http://repo.mysql.com/apt/{{ ansible_lsb.id|lower }} {{ ansible_lsb.codename|lower }} mysql-8.0"
-#      state: present
-
 - name: Update apt and install MySQL server
   ansible.builtin.apt:
     pkg:
@@ -20,20 +10,3 @@
   ansible.builtin.pip:
     name: pymysql
     state: present
-#  - name: Install percona repo deb package
-#    ansible.builtin.apt:
-#      deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_lsb.codename|lower }}_all.deb"
-#
-#  - name: Configure percona repo
-#    ansible.builtin.shell: "percona-release enable-only tools release"
-#    args:
-#      executable: /bin/bash
-#
-#  - name: Update apt and Percona XtraBackup
-#    ansible.builtin.apt:
-#      pkg:
-#        - percona-xtrabackup-80
-#        - qpress
-#      state: present
-#      allow_downgrade: yes
-#      update_cache: true

@@ -60,9 +60,19 @@ resource "local_file" "inventory" {
   ]
 }
 
-resource "null_resource" "clear_local_ssh_keys" {
+resource "null_resource" "clear_local_ssh_keys_ip" {
   provisioner "local-exec" {
     command = "ssh-keygen -R ${yandex_compute_instance.nginx.network_interface.0.nat_ip_address}"
+  }
+
+  depends_on = [
+    local_file.inventory
+  ]
+}
+
+resource "null_resource" "clear_local_ssh_keys_hostname" {
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${yandex_compute_instance.nginx.hostname}"
   }
 
   depends_on = [

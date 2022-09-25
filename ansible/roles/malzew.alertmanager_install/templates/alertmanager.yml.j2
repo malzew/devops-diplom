@@ -3,17 +3,17 @@
 global:
 
 # Отсюда читаем все шаблоны:
-  - '/etc/alertmanager/templates/*.tmpl'
+#  - '/etc/alertmanager/templates/*.tmpl'
 
 route:
   # Группировка алертов
   group_by: ['alertname', 'cluster', 'service']
   # время ожидания перед отправкой уведомления для группы
-  group_wait: 10s
+  group_wait: 30s
   # время отправки повторного сообщения для группы
-  group_interval: 10s
+  group_interval: 5m
   # время до отправки повторного сообщения
-  repeat_interval: 10s
+  repeat_interval: 1h
   receiver: 'telega'
 receivers:
   - name: 'telega'

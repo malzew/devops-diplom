@@ -1,4 +1,6 @@
 # Образ берем стандартный, предоставляемый Яндексом, по семейству
+# В данной работе используется Ubuntu 20.04
+# Переход на версию 22.04 потребует изменения настройки NAT
 data "yandex_compute_image" "ubuntu" {
   family = "ubuntu-2004-lts"
 }
@@ -7,10 +9,6 @@ variable "username" {
   type = string
   default = "ubuntu"
 }
-
-/*data "yandex_compute_image" "nat_instance" {
-  family = "nat-instance-ubuntu"
-}*/
 
 data "yandex_dns_zone" "zone" {
   name = "eladminru"
@@ -21,6 +19,12 @@ variable "dns_zone" {
   default = "eladmin.ru"
 }
 
+variable "dns_zone_ttl" {
+  type = string
+  default = "300"
+}
+
+# Список для создания поддоменов и конфигурации NGINX
 variable "services" {
   default = {
     www = "app"
@@ -31,6 +35,7 @@ variable "services" {
   }
 }
 
+# Список для настройки мониторинга
 variable "monitoring" {
   default = {
     nginx = "nginx"
@@ -42,6 +47,7 @@ variable "monitoring" {
   }
 }
 
+# Настройки СУБД, боевые нужно переместить в secrets.tf
 variable "database" {
   default = {
     database_name = "wordpress"

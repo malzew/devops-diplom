@@ -60,6 +60,14 @@
     - telega_bot_token is defined
     - telega_chat_id is defined
 
+- name: Create a directory /var/lib/alertmanager if it does not exist
+  ansible.builtin.file:
+    path: "/var/lib/alertmanager"
+    state: directory
+    mode: 0755
+    owner: alertmanager
+    group: alertmanager
+
 - name: Create alertmanager.service file from j2 template
   ansible.builtin.template:
     src: "alertmanager.service.j2"
