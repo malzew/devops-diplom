@@ -5,3 +5,4 @@ skip_list:  # or 'skip_list' to silence them completely
   - risky-shell-pipe  # Shells that use pipes should set the pipefail option.
   - yaml[line-length]  # Violations reported by yamllint.
   - role-name
+  - command-instead-of-shell  # Use shell only when shell functionality is required.

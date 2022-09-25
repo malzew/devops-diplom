@@ -1,0 +1,8 @@
+---
+- name: Register GitLab Runner
+  hosts: runner
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.runner_register

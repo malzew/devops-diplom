@@ -55,3 +55,13 @@ variable "database" {
     database_password = "wordpress"
   }
 }
+
+variable "gitlab_root_password" {
+  type = string
+  default = "wordpress"
+}
+
+variable "gitlab_runner_token" {
+  type = string
+  default = "awerpoi34598awjalwknalcsn8eruyq2"
+}

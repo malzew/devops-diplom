@@ -1,4 +1,5 @@
 {% raw %}
+# Исходники тут https://qna.habr.com/q/1134068
 # cat /etc/alertmanager/alertmanager.yml
 global:
 
@@ -11,7 +12,7 @@ route:
   # время ожидания перед отправкой уведомления для группы
   group_wait: 30s
   # время отправки повторного сообщения для группы
-  group_interval: 5m
+  group_interval: 10m
   # время до отправки повторного сообщения
   repeat_interval: 1h
   receiver: 'telega'

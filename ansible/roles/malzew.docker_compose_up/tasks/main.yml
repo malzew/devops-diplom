@@ -14,7 +14,6 @@
     group: root
     mode: 0644
   when:
-    - domain_name is defined
     - docker_compose_template is defined
     - docker_compose_src_dir is defined
 

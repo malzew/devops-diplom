@@ -20,20 +20,3 @@
       - gitlab-runner
     state: present
     update_cache: true
-
-- name: Create script for registration from j2 template
-  ansible.builtin.template:
-    src: "gitlab-runner-register.j2"
-    dest: "gitlab-runner-register"
-    owner: root
-    group: root
-    mode: 0755
-  when:
-    - domain_name is defined
-#  - name: Register GitLab Runner
-#    ansible.builtin.shell: "./gitlab-runner-register"
-#    args:
-#      executable: /bin/bash
-#    when:
-#      - registration_token is defined
-#      - domain_name is defined

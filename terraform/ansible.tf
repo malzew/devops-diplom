@@ -72,7 +72,7 @@ resource "null_resource" "clear_local_ssh_keys_ip" {
 
 resource "null_resource" "clear_local_ssh_keys_hostname" {
   provisioner "local-exec" {
-    command = "ssh-keygen -R ${yandex_compute_instance.nginx.hostname}"
+    command = "ssh-keygen -R ${var.dns_zone}"
   }
 
   depends_on = [
