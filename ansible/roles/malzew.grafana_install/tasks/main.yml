@@ -15,3 +15,57 @@
       - grafana
     state: present
     update_cache: true
+
+- name: Create a directory /etc/grafana/provisioning/datasources if it does not exist
+  ansible.builtin.file:
+    path: "/etc/grafana/provisioning/datasources"
+    state: directory
+    mode: 0755
+    owner: root
+    group: grafana
+
+- name: Create a directory /etc/grafana/provisioning/dashboards if it does not exist
+  ansible.builtin.file:
+    path: "/etc/grafana/provisioning/dashboards"
+    state: directory
+    mode: 0755
+    owner: root
+    group: grafana
+
+- name: Create a directory /etc/grafana/dashboards if it does not exist
+  ansible.builtin.file:
+    path: "/etc/grafana/dashboards"
+    state: directory
+    mode: 0755
+    owner: root
+    group: grafana
+
+- name: Create /etc/grafana/provisioning/datasources/prometheus_source.yaml file from j2 template
+  ansible.builtin.template:
+    src: "prometheus_source.yaml.j2"
+    dest: "/etc/grafana/provisioning/datasources/prometheus_source.yaml"
+    owner: root
+    group: grafana
+    mode: 0644
+
+- name: Create /etc/grafana/provisioning/dashboards/dashboards.yaml file from j2 template
+  ansible.builtin.template:
+    src: "dashboards.yaml.j2"
+    dest: "/etc/grafana/provisioning/dashboards/dashboards.yaml"
+    owner: root
+    group: grafana
+    mode: 0644
+
+- name: Create /etc/grafana/dashboards/node_exporter_full.json file from j2 template
+  ansible.builtin.template:
+    src: "node_exporter_full.json.j2"
+    dest: "/etc/grafana/dashboards/node_exporter_full.json"
+    owner: root
+    group: grafana
+    mode: 0644
+
+- name: Make sure a service grafana is running
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: grafana-server

@@ -36,9 +36,9 @@ variable "monitoring" {
     nginx = "nginx"
     www = "app"
     gitlab = "gitlab"
-    grafana = "grafana"
-    prometheus = "prometheus"
-    alertmanager = "alertmanager"
+    runner = "runner"
+    db01 = "db01"
+    db02 = "db02"
   }
 }
 

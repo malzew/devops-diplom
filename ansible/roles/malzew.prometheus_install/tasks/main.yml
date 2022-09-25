@@ -57,6 +57,14 @@
     group: root
     mode: 0644
 
+- name: Assemble prometheus.yml from fragments
+  ansible.builtin.assemble:
+    src: "/etc/prometheus"
+    dest: "/etc/prometheus/prometheus.yml"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Create a directory /var/lib/prometheus if it does not exist
   ansible.builtin.file:
     path: "/var/lib/prometheus"
