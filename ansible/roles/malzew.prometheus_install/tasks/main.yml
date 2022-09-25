@@ -65,6 +65,14 @@
     group: root
     mode: 0644
 
+- name: Create /etc/prometheus/alert.rules.yml file from j2 template
+  ansible.builtin.template:
+    src: "alert.rules.yml.j2"
+    dest: "/etc/prometheus/alert.rules.yml"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Create a directory /var/lib/prometheus if it does not exist
   ansible.builtin.file:
     path: "/var/lib/prometheus"
@@ -73,7 +81,7 @@
     owner: prometheus
     group: prometheus
 
-- name: Create prometheus file from j2 template
+- name: Create prometheus.service file from j2 template
   ansible.builtin.template:
     src: "prometheus.service.j2"
     dest: "/etc/systemd/system/prometheus.service"

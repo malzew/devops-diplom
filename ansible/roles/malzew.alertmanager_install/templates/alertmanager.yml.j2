@@ -1,0 +1,27 @@
+{% raw %}
+# cat /etc/alertmanager/alertmanager.yml
+global:
+
+# Отсюда читаем все шаблоны:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+route:
+  # Группировка алертов
+  group_by: ['alertname', 'cluster', 'service']
+  # время ожидания перед отправкой уведомления для группы
+  group_wait: 10s
+  # время отправки повторного сообщения для группы
+  group_interval: 10s
+  # время до отправки повторного сообщения
+  repeat_interval: 10s
+  receiver: 'telega'
+receivers:
+  - name: 'telega'
+    telegram_configs:
+    - bot_token: '{% endraw %}{{ telega_bot_token }}{% raw %}'
+      api_url: 'https://api.telegram.org'
+      chat_id: {% endraw %}{{ telega_chat_id }}{% raw %}
+      message:  "Alertname: {{ .GroupLabels.alertname }}\n Severity: {{ .CommonLabels.severity }}\n {{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
+      parse_mode: ''
+
+{% endraw %}

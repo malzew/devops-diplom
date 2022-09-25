@@ -12,7 +12,7 @@ resource "null_resource" "monitoring_config" {
 
 resource "null_resource" "monitoring_install" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/monitoring_install.yml"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/monitoring_install.yml --extra-vars 'telega_bot_token=${var.telega_bot_token} telega_chat_id=${var.telega_chat_id}'"
   }
 
   depends_on = [

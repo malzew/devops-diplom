@@ -7,13 +7,13 @@
   roles:
   - role: malzew.install_tools
 
-- name: Node_exporter install
-  hosts: nodes
-  become: yes
-  become_user: root
-  remote_user: ubuntu
-  roles:
-  - role: malzew.node_exporter_install
+#  - name: Node_exporter install
+#    hosts: nodes
+#    become: yes
+#    become_user: root
+#    remote_user: ubuntu
+#    roles:
+#    - role: malzew.node_exporter_install
 
 - name: Prometheus install
   hosts: monitoring
@@ -30,3 +30,11 @@
   remote_user: ubuntu
   roles:
   - role: malzew.grafana_install
+
+- name: Alertmanager install
+  hosts: monitoring
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.alertmanager_install
