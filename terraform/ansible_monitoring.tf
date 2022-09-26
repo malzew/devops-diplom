@@ -6,7 +6,7 @@ resource "null_resource" "monitoring_config" {
   for_each = var.monitoring
 
   depends_on = [
-    null_resource.proxy_firewall
+    null_resource.proxy_restart
   ]
 }
 

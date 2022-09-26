@@ -65,6 +65,19 @@
     group: root
     mode: 0644
 
+- name: Ansible find files by wildcard
+  ansible.builtin.find:
+    paths: /etc/prometheus
+    patterns: '*.append.*'
+    use_regex: true
+  register: wildcard_files_to_delete
+
+- name: Ansible remove files by wildcard
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ wildcard_files_to_delete.files }}"
+
 - name: Create /etc/prometheus/alert.rules.yml file from j2 template
   ansible.builtin.template:
     src: "alert.rules.yml.j2"

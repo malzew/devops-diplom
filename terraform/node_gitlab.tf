@@ -4,7 +4,7 @@ resource "yandex_compute_instance" "gitlab" {
   zone        = "ru-central1-a"
   hostname    = "gitlab.${var.dns_zone}"
 
-  # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
+  # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
     cores  = 4
     memory = 4
@@ -16,7 +16,7 @@ resource "yandex_compute_instance" "gitlab" {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.id
       type = "network-ssd"
-      size = "20"
+      size = "40"
     }
   }
 

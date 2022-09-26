@@ -72,8 +72,7 @@ resource "null_resource" "create_proxy_config_services" {
   for_each = var.services
 
   depends_on = [
-    null_resource.get_letsencrypt_services,
-    null_resource.get_letsencrypt
+    null_resource.create_proxy_config
   ]
 }
 
