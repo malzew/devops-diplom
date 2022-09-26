@@ -4,6 +4,6 @@ resource "null_resource" "app" {
   }
 
   depends_on = [
-    null_resource.proxy_restart
+    null_resource.proxy_firewall
   ]
 }

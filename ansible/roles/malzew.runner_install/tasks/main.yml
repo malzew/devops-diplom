@@ -1,5 +1,5 @@
 ---
-- name: Download node_exporter binary
+- name: Download GitLab runner apt script
   ansible.builtin.get_url:
     url: "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh"
     dest: "/tmp/script.deb.sh"

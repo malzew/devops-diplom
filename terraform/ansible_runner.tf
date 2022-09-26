@@ -4,7 +4,7 @@ resource "null_resource" "runner_install" {
   }
 
   depends_on = [
-    null_resource.proxy_restart
+    null_resource.proxy_firewall
   ]
 }
 
@@ -14,6 +14,7 @@ resource "null_resource" "runner_register" {
   }
 
   depends_on = [
-    null_resource.wait_gitlab
+    null_resource.wait_gitlab,
+    null_resource.runner_install
   ]
 }

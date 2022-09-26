@@ -26,6 +26,11 @@
     path: "/etc/default/ufw"
     regexp: "^DEFAULT_FORWARD_POLICY=\"DROP\""
 
+- name: Allow everything by default and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: allow
+
 - name: Allow access to this host from any
   community.general.ufw:
     rule: allow

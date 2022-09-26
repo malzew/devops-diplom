@@ -78,3 +78,4 @@ max_binlog_size   = 100M
 binlog_do_db		= {{ binlog_do_db }}
 # binlog_ignore_db	= include_database_name
 relay_log       =   /var/log/mysql/mysql-relay-bin.log
+sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION

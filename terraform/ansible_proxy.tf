@@ -37,7 +37,7 @@ resource "null_resource" "get_letsencrypt" {
   }
 
   depends_on = [
-    null_resource.proxy,
+    null_resource.proxy_firewall,
     yandex_dns_recordset.records
   ]
 }
@@ -49,14 +49,14 @@ resource "null_resource" "get_letsencrypt_services" {
   for_each = var.services
 
   depends_on = [
-    null_resource.proxy,
+    null_resource.proxy_firewall,
     yandex_dns_recordset.records
   ]
 }
 
 resource "null_resource" "create_proxy_config" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=app.${var.dns_zone} default_conf_file=default.conf'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=app default_conf_file=default.conf'"
   }
 
   depends_on = [
