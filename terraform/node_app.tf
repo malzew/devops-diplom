@@ -30,7 +30,7 @@ resource "yandex_compute_instance" "app" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet_zone_a.id
-    nat = "true"
+    nat = "false"
   }
 
   # Передаем свои SSH ключи для авторизации

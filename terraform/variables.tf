@@ -24,10 +24,15 @@ variable "dns_zone_ttl" {
   default = "300"
 }
 
+variable "project_name" {
+  type = string
+  default = "wordpress"
+}
+
 # Список для создания поддоменов и конфигурации NGINX
 variable "services" {
   default = {
-    www = "app"
+    www = "app:8080"
     gitlab = "gitlab"
     grafana = "monitoring:3000"
     prometheus = "monitoring:9090"
@@ -56,6 +61,7 @@ variable "database" {
   }
 }
 
+#Настройки gitlab
 variable "gitlab_root_password" {
   type = string
   default = "wordpress"
@@ -64,4 +70,14 @@ variable "gitlab_root_password" {
 variable "gitlab_runner_token" {
   type = string
   default = "awerpoi34598awjalwknalcsn8eruyq2"
+}
+
+variable "git_initial_repo" {
+  type = string
+  default = "https://github.com/malzew/wordpress.git"
+}
+
+variable "git_branch" {
+  type = string
+  default = "main"
 }

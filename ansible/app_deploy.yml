@@ -1,0 +1,12 @@
+---
+- name: Install App
+  hosts: app
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.app_deploy
+    when:
+      - project_name is defined
+      - git_repo is defined
+      - git_branch is defined

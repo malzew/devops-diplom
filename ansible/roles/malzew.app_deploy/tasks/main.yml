@@ -1,0 +1,48 @@
+---
+- name: Recursively remove directory
+  ansible.builtin.file:
+    path: "/opt/{{ project_name }}/src"
+    state: absent
+
+- name: Create a directory for '{{ project_name }}' if it does not exist
+  ansible.builtin.file:
+    path: "/opt/{{ project_name }}/src"
+    state: directory
+    mode: '0744'
+
+- name: Example clone of a single branch
+  ansible.builtin.git:
+    repo: "{{ git_repo }}"
+    dest: "/opt/{{ project_name }}/src"
+    single_branch: yes
+    version: "{{ git_branch }}"
+
+- name: Create a directory for '{{ project_name }}' uploads if it does not exist
+  ansible.builtin.file:
+    path: "/opt/{{ project_name }}/uploads"
+    state: directory
+    mode: '0777'
+
+- name: Stop '{{ project_name }}' container
+  community.docker.docker_compose:
+    project_src: "/opt/{{ project_name }}/src"
+    build: false
+    stopped: true
+
+- name: Remove image '{{ project_name }}':old
+  community.docker.docker_image:
+    state: absent
+    name: "{{ project_name }}"
+    tag: old
+
+- name: Add tag old to image if exist
+  community.docker.docker_image:
+    name: "{{ project_name }}:latest"
+    repository: "{{ project_name }}:old"
+    force_tag: true
+    source: local
+
+- name: Create and start services
+  community.docker.docker_compose:
+    project_src: "/opt/{{ project_name }}/src"
+    build: yes

@@ -23,3 +23,9 @@
 - name: Install docker module for python
   ansible.builtin.pip:
     name: docker
+
+- name: Add the user 'ubuntu' to group 'docker'
+  ansible.builtin.user:
+    name: ubuntu
+    groups: docker
+    append: yes
