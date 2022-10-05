@@ -5,11 +5,8 @@ gitlab-runner register \
   --url "http://{{ domain_name }}/" \
   --registration-token "{{ registration_token }}" \
   --executor "docker" \
-  --docker-image alpine:latest \
+  --docker-image "docker:stable" \
   --description "docker-runner" \
   --maintenance-note "GitLab Runner" \
-  --tag-list "docker" \
-  --run-untagged="true" \
-  --locked="false" \
-  --access-level="not_protected" \
-  --leave-runner
+  --tag-list "docker,deployment" \
+  --docker-privileged
