@@ -10,7 +10,7 @@
 - name: Create /etc/prometheus/prometheus.yml.append file from j2 template
   ansible.builtin.template:
     src: "prometheus.yml.append.j2"
-    dest: "/etc/prometheus/prometheus.yml.append.{{ monitoring_target }}"
+    dest: "/etc/prometheus/prometheus.yml.{{ monitoring_target }}.append"
     owner: root
     group: root
     mode: 0644

@@ -30,6 +30,16 @@ resource "null_resource" "proxy_firewall" {
   ]
 }
 
+resource "null_resource" "proxy_insert_dnat_rule" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_firewall_insert_dnat_rule.yml --extra-vars 'proto=tcp dest_port=2222 dest=${yandex_compute_instance.gitlab.network_interface.0.ip_address}:2222'"
+  }
+
+  depends_on = [
+    null_resource.proxy_firewall
+  ]
+}
+
 # TLS certs for services
 resource "null_resource" "get_letsencrypt" {
   provisioner "local-exec" {
@@ -37,7 +47,7 @@ resource "null_resource" "get_letsencrypt" {
   }
 
   depends_on = [
-    null_resource.proxy_firewall,
+    null_resource.proxy_insert_dnat_rule,
     yandex_dns_recordset.records
   ]
 }
@@ -49,7 +59,7 @@ resource "null_resource" "get_letsencrypt_services" {
   for_each = var.services
 
   depends_on = [
-    null_resource.proxy_firewall,
+    null_resource.proxy_insert_dnat_rule,
     yandex_dns_recordset.records
   ]
 }
@@ -86,4 +96,3 @@ resource "null_resource" "proxy_restart" {
     null_resource.create_proxy_config
   ]
 }
-

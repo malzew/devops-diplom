@@ -42,7 +42,7 @@ key.json
 secrets.tf
 
 inventory
-id_rsa.pub
+*id_rsa*
 
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/.gitignore

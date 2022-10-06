@@ -65,14 +65,13 @@
     group: root
     mode: 0644
 
-- name: Ansible find files by wildcard
+- name: Ansible find files by wildcard '*.append'
   ansible.builtin.find:
     paths: /etc/prometheus
-    patterns: '*.append.*'
-    use_regex: true
+    patterns: '*.append'
   register: wildcard_files_to_delete
 
-- name: Ansible remove files by wildcard
+- name: Ansible remove files by wildcard '*.append'
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent

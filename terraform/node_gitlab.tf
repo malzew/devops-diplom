@@ -6,8 +6,8 @@ resource "yandex_compute_instance" "gitlab" {
 
   # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
-    cores  = 4
-    memory = 4
+    cores  = 6
+    memory = 6
     core_fraction = 100
   }
 

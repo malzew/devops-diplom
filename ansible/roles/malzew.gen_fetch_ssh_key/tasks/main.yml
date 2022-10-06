@@ -33,3 +33,23 @@
     - username is defined
     - username == "root"
     - destfile is defined
+
+- name: Fetch secret key
+  ansible.builtin.fetch:
+    src: "/home/{{ username }}/.ssh/id_rsa"
+    dest: "{{ destfile_secret }}"
+    flat: yes
+  when:
+    - username is defined
+    - username != "root"
+    - destfile_secret is defined
+
+- name: Fetch secret key
+  ansible.builtin.fetch:
+    src: "{{ username }}/.ssh/id_rsa"
+    dest: "{{ destfile_secret }}"
+    flat: yes
+  when:
+    - username is defined
+    - username == "root"
+    - destfile_secret is defined

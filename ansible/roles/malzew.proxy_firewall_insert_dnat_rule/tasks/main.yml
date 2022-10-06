@@ -1,0 +1,17 @@
+---
+- name: Customize ufw forwarding policy
+  become: true
+  ansible.builtin.lineinfile:
+    line: "-A PREROUTING -p {{ proto }} --dport {{ dest_port }} -j DNAT --to-destination {{ dest }}"
+    insertafter: "^:POSTROUTING ACCEPT \\[0:0\\]"
+    path: "/etc/ufw/before.rules"
+    firstmatch: yes
+  when:
+    - proto is defined
+    - dest_port is defined
+    - dest is defined
+
+- name: Deny everything by default and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny

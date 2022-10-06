@@ -4,7 +4,7 @@ resource "null_resource" "mysql_install" {
   }
 
   depends_on = [
-    null_resource.proxy_firewall
+    null_resource.proxy_insert_dnat_rule
   ]
 }
 

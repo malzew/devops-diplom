@@ -20,6 +20,7 @@ resource "null_resource" "monitoring_install" {
     null_resource.gitlab_install,
     null_resource.mysql_replication_slave,
     null_resource.proxy_restart,
-    null_resource.runner_install
+    null_resource.runner_install,
+    null_resource.monitoring_config
   ]
 }

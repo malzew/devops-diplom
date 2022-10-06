@@ -1,0 +1,12 @@
+---
+- name: Generate an OpenSSH keypair for '{{ username }}' on app
+  hosts: app
+  remote_user: ubuntu
+  roles:
+  - role: malzew.gen_fetch_ssh_key
+
+- name: Copy ssh key to app for deploy
+  hosts: app
+  remote_user: ubuntu
+  roles:
+  - role: malzew.copy_ssh_key

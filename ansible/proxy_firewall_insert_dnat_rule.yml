@@ -1,0 +1,12 @@
+---
+- name: Restart proxy
+  hosts: nginx
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.proxy_firewall_insert_dnat_rule
+    when:
+      - proto is defined
+      - dest_port is defined
+      - dest is defined

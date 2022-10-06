@@ -4,7 +4,17 @@ resource "null_resource" "app_install" {
   }
 
   depends_on = [
-    null_resource.proxy_firewall
+    null_resource.proxy_insert_dnat_rule
+  ]
+}
+
+resource "null_resource" "app_ssh" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/app_ssh.yml --extra-vars 'username=${var.username} destfile=files/app_id_rsa.pub srcfile=files/app_id_rsa.pub destfile_secret=files/app_id_rsa'"
+  }
+
+  depends_on = [
+    null_resource.app_install
   ]
 }
 
@@ -14,6 +24,6 @@ resource "null_resource" "app_deploy" {
   }
 
   depends_on = [
-    null_resource.app_install
+    null_resource.app_ssh
   ]
 }

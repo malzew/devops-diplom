@@ -26,6 +26,13 @@
     path: "/etc/default/ufw"
     regexp: "^DEFAULT_FORWARD_POLICY=\"DROP\""
 
+- name: Customize ufw forwarding policy
+  become: true
+  ansible.builtin.lineinfile:
+    line: "MANAGE_BUILTINS=no"
+    path: "/etc/default/ufw"
+    regexp: "^MANAGE_BUILTINS=yes"
+
 - name: Allow everything by default and enable UFW
   community.general.ufw:
     state: enabled
