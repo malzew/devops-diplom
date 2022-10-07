@@ -1,5 +1,5 @@
 ---
-- name: Restart proxy
+- name: Insert DNAT rule for port '{{ dest_port }}' forwarded to '{{ dest }}'
   hosts: nginx
   become: yes
   become_user: root

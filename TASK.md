@@ -1,6 +1,6 @@
-### Дипломный практикум в YandexCloud
+## Задание
 
-### [Полное Задание](TASK.md)
+### Дипломный практикум в YandexCloud
 
 #### Цели:
 
@@ -20,19 +20,17 @@
 
 Настроить мониторинг инфраструктуры с помощью стека: Prometheus, Alert Manager и Grafana.
 
-### Введение
-
-Для решения поставленных задач...
-
-Выбран подход с хранением переменных в terraform...
-
-Запуск ansible из terraform...
-
-Дистрибутив ОС Linux Ubuntu 20.04 LTS потому что... 
-
-### Этапы выполнения:
+Этапы выполнения:
 
 ### 1. Регистрация доменного имени
+
+Подойдет любое доменное имя на ваш выбор в любой доменной зоне.  
+
+#### Рекомендуемые регистраторы:
+
+• nic.ru
+
+• reg.ru
 
 #### Цель:
 
@@ -44,27 +42,40 @@
 
 Вы зарезистрировали домен и можете им управлять (редактировать dns записи в рамках этого домена).
 
----
-
-#### Решение
-
-Зарегистрировано доменное имя:
-
-#### `eladmin.ru`
-
-Доступ к личному кабинету регистратора есть.
-
-Регистратор:
-
-https://reg.ru
-
-Ожидаемый результат достигнут.
-
----
 
 ### 2. Создание инфраструктуры  
 
 Для начала необходимо подготовить инфраструктуру в YC при помощи Terraform.
+
+#### Особенности выполнения:
+
+Бюджет купона ограничен, что следует иметь в виду при проектировании инфраструктуры и использовании ресурсов;  
+
+Следует использовать последнюю стабильную версию Terraform.
+
+#### Предварительная подготовка:
+
+Создайте сервисный аккаунт, который будет в дальнейшем использоваться Terraform для работы с инфраструктурой с необходимыми и достаточными правами. Не стоит использовать права суперпользователя  
+
+#### Подготовьте backend для Terraform:  
+
+а. Рекомендуемый вариант: Terraform Cloud  
+
+б. Альтернативный вариант: S3 bucket в созданном YC аккаунте.
+
+*Выбран альтернативный вариант.*
+
+#### Настройте workspaces
+
+а. Рекомендуемый вариант: создайте два workspace: stage и prod. В случае выбора этого варианта все последующие шаги должны учитывать факт существования нескольких workspace.  
+
+б. Альтернативный вариант: используйте один workspace, назвав его stage. Пожалуйста, не используйте workspace, создаваемый Terraform-ом по-умолчанию (default).
+
+Создайте VPC с подсетями в разных зонах доступности.  
+
+Убедитесь, что теперь вы можете выполнить команды terraform destroy и terraform apply без дополнительных ручных действий.
+
+В случае использования Terraform Cloud в качестве backend убедитесь, что применение изменений успешно проходит, используя web-интерфейс Terraform cloud.  
 
 #### Цель:
 
@@ -76,23 +87,12 @@ https://reg.ru
 
 Terraform сконфигурирован и создание инфраструктуры посредством Terraform возможно без дополнительных ручных действий.
 
----
-
-#### Решение
-
-Версия terraform
-
-```commandline
-$ terraform --version
-Terraform v1.3.0
-on linux_amd64
-```
-
-Ожидаемый результат достигнут.
-
----
+Полученная конфигурация инфраструктуры является предварительной, поэтому в ходе дальнейшего выполнения задания возможны изменения.
 
 ### 3. Установка Nginx и LetsEncrypt
+
+Необходимо разработать Ansible роль для установки Nginx и LetsEncrypt.  
+Для получения LetsEncrypt сертификатов во время тестов своего кода пользуйтесь тестовыми сертификатами, так как количество запросов к боевым серверам LetsEncrypt лимитировано.  
 
 #### Рекомендации:
 
@@ -108,15 +108,17 @@ on linux_amd64
 
 В вашей доменной зоне настроены все A-записи на внешний адрес этого сервера:
 
-https://www.eladmin.ru (WordPress)
+https://www.you.domain (WordPress)
 
-https://gitlab.eladmin.ru (Gitlab)
+https://gitlab.you.domain (Gitlab)
 
-https://grafana.eladmin.ru (Grafana)
+https://grafana.you.domain (Grafana)
 
-https://prometheus.eladmin.ru (Prometheus)
+https://prometheus.you.domain (Prometheus)
 
-https://alertmanager.eladmin.ru (Alert Manager)
+https://alertmanager.you.domain (Alert Manager)
+
+Настроены все upstream для выше указанных URL, куда они сейчас ведут на этом шаге не важно, позже вы их отредактируете и укажите верные значения.  
 
 В браузере можно открыть любой из этих URL и увидеть ответ сервера (502 Bad Gateway). На текущем этапе выполнение задания это нормально!  
 
@@ -126,7 +128,7 @@ https://alertmanager.eladmin.ru (Alert Manager)
 
 #### Рекомендации:
 
-• Имена серверов: db01.eladmin.ru и db02.eladmin.ru
+• Имена серверов: db01.you.domain и db02.you.domain
 
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
@@ -150,7 +152,7 @@ MySQL работает в режиме репликации Master/Slave.
 
 #### Рекомендации:
 
-• Имя сервера: app.eladmin.ru
+• Имя сервера: app.you.domain
 
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
@@ -166,11 +168,11 @@ MySQL работает в режиме репликации Master/Slave.
 
 В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy:
 
-https://www.eladmin.ru (WordPress)
+https://www.you.domain (WordPress)
 
 На сервере you.domain отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен WordPress.  
 
-В браузере можно открыть URL https://www.eladmin.ru и увидеть главную страницу WordPress.
+В браузере можно открыть URL https://www.you.domain и увидеть главную страницу WordPress.
 
 ### 6. Установка Gitlab CE и Gitlab Runner
 
@@ -178,13 +180,13 @@ https://www.eladmin.ru (WordPress)
 
 #### Рекомендации:
 
-• Имена серверов: gitlab.eladmin.ru и runner.eladmin.ru  
+• Имена серверов: gitlab.you.domain и runner.you.domain  
 
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
 #### Цель:
 
-Построить pipeline доставки кода в среду эксплуатации, то есть настроить автоматический деплой на сервер app.eladmin.ru при коммите в репозиторий с WordPress.  
+Построить pipeline доставки кода в среду эксплуатации, то есть настроить автоматический деплой на сервер app.you.domain при коммите в репозиторий с WordPress.  
 
 #### Ожидаемый результат:
 
@@ -192,7 +194,7 @@ https://www.eladmin.ru (WordPress)
 
 В вашей доменной зоне настроена A-запись на внешний адрес reverse proxy:
 
-https://gitlab.eladmin.ru (Gitlab)
+https://gitlab.you.domain (Gitlab)
 
 На сервере you.domain отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен Gitlab.  
 
@@ -204,7 +206,7 @@ https://gitlab.eladmin.ru (Gitlab)
 
 #### Рекомендации:
 
-• Имя сервера: monitoring.eladmin.ru  
+• Имя сервера: monitoring.you.domain  
 
 • Характеристики: 4vCPU, 4 RAM, Internal address.
 
@@ -218,11 +220,11 @@ https://gitlab.eladmin.ru (Gitlab)
 
 В вашей доменной зоне настроены A-записи на внешний адрес reverse proxy:
 
-• https://grafana.eladmin.ru (Grafana)
+• https://grafana.you.domain (Grafana)
 
-• https://prometheus.eladmin.ru (Prometheus)
+• https://prometheus.you.domain (Prometheus)
 
-• https://alertmanager.eladmin.ru (Alert Manager)
+• https://alertmanager.you.domain (Alert Manager)
 
 На сервере you.domain отредактированы upstreams для выше указанных URL и они смотрят на виртуальную машину на которой установлены Prometheus, Alert Manager и Grafana.  
 
@@ -246,14 +248,14 @@ https://gitlab.eladmin.ru (Gitlab)
 
 Скриншоты веб-интерфейсов всех сервисов работающих по HTTPS на вашем доменном имени.
 
-https://www.eladmin.ru (WordPress)
+https://www.you.domain (WordPress)
 
-https://gitlab.eladmin.ru (Gitlab)
+https://gitlab.you.domain (Gitlab)
 
-https://grafana.eladmin.ru (Grafana)
+https://grafana.you.domain (Grafana)
 
-https://prometheus.eladmin.ru (Prometheus)
+https://prometheus.you.domain (Prometheus)
 
-https://alertmanager.eladmin.ru (Alert Manager)
+https://alertmanager.you.domain (Alert Manager)
 
 Все репозитории рекомендуется хранить на одном из ресурсов (github.com или gitlab.com).
