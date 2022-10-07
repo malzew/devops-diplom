@@ -58,6 +58,14 @@
 
 https://reg.ru
 
+1. Зарегистрироваться на Yandex Cloud, привязать платежную карту. Результат - cloud_id
+2. Установить утилиту для работы в cli. https://cloud.yandex.ru/docs/cli/quickstart
+3. Создать папку для инфраструктуры - создана папка netology. Результат - folder_id
+
+Зона DNS делегирована от регистратора к Yandex Cloud для автоматического создания записей при работе terraform.
+
+https://cloud.yandex.ru/docs/dns/operations/zone-create-public
+
 Ожидаемый результат достигнут.
 
 ---
@@ -87,6 +95,38 @@ $ terraform --version
 Terraform v1.3.0
 on linux_amd64
 ```
+
+Настройки провайдера Yandex Cloud находятся в файлах
+- [provider.tf](./terraform/provider.tf)
+- key.json - файл не загружается в репозиторий
+
+Для корректной работы кода необходимо:
+ 
+4. В папке создать сервисный аккаунт с ролью `editor`. https://cloud.yandex.ru/docs/iam/operations/sa/create
+5. Создать статический ключ доступа для сервисного аккаунта. Это необходимо для доступа terraform к S3 бакету. Ключ сохраняется в переменных окружания `AWS_ACCESS_KEY_ID = key_id` и `AWS_SECRET_ACCESS_KEY = secret` для постоянного хранения переменных окружения можно использовать файл `~/.bashrc` https://cloud.yandex.ru/docs/iam/operations/sa/create-access-key
+6. Создать авторизированный ключ для сервисного аккаунта в файле `key.json` - он используется для доступа terraform к API Yandex Cloud при работе с инфраструктурой. https://cloud.yandex.ru/docs/iam/operations/authorized-key/create
+7. Создать Object Storage, он же S3 бакет. Размер можно самый минимальный, установлен 1 Гб. Результат в настройке бакета - bucket
+
+Делаем
+
+```commandline
+terraform init
+terraform workspace new prod
+terraform workspace new stage
+terraform workspace select stage
+```
+
+Скачиваются необходимые провайдеры terraform и файл состояния terraform хранится в бакете.
+
+Создаются workspaces stage и prod
+
+Дальнейшая работа будет использовать workspace stage. Использование workspace prod занесем в [TODO](./TODO.md)
+
+Сетевая инфраструктура описана в файле [network.tf](./terraform/network.tf)
+
+Возможно создание VPC в разных зонах доступности.
+
+Terraform сконфигурирован и создание инфраструктуры посредством Terraform возможно без дополнительных ручных действий.
 
 Ожидаемый результат достигнут.
 
