@@ -1,5 +1,5 @@
 ---
-# Need to set {{ domain_name }} var
+# Дополнительно необходимо установить переменную domain_name
 
 acme_challenge_type: http-01
 

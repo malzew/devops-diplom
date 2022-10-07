@@ -4,7 +4,7 @@ resource "yandex_compute_instance" "nginx" {
   zone        = "ru-central1-a"
   hostname    = "nginx.${var.dns_zone}"
 
-  # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
+  # В ресурсах 2 ядра, 2 гига оперативы, под 100% нагрузку
   resources {
     cores  = 2
     memory = 2
