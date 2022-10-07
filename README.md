@@ -26,7 +26,15 @@
 
 Выбран подход с хранением переменных в terraform...
 
+[variables.tf](./terraform/variables.tf)
+
+secrets.tf - не загружается в репозиторий
+
 Запуск ansible из terraform...
+
+[ansible.tf](./terraform/ansible.tf)
+
+[ansible.cfg](./terraform/ansible.cfg)
 
 Дистрибутив ОС Linux Ubuntu 20.04 LTS потому что... 
 
@@ -158,7 +166,13 @@ https://prometheus.eladmin.ru (Prometheus)
 
 https://alertmanager.eladmin.ru (Alert Manager)
 
-В браузере можно открыть любой из этих URL и увидеть ответ сервера (502 Bad Gateway). На текущем этапе выполнение задания это нормально!  
+В браузере можно открыть любой из этих URL и увидеть ответ сервера (502 Bad Gateway). На текущем этапе выполнение задания это нормально!
+
+---
+
+#### Решение
+
+---
 
 ### 4. Установка кластера MySQL
 
@@ -182,7 +196,6 @@ MySQL работает в режиме репликации Master/Slave.
 
 В кластере автоматически создаётся пользователь wordpress с полными правами на базу wordpress и паролем wordpress.  
 
-Вы должны понимать, что в рамках обучения это допустимые значения, но в боевой среде использование подобных значений не приемлимо! Считается хорошей практикой использовать логины и пароли повышенного уровня сложности. В которых будут содержаться буквы верхнего и нижнего регистров, цифры, а также специальные символы!
 
 ### 5. Установка WordPress
 
@@ -198,7 +211,6 @@ MySQL работает в режиме репликации Master/Slave.
 
 Установить WordPress. Это система управления содержимым сайта (CMS) с открытым исходным кодом.  
 
-По данным W3techs, WordPress используют 64,7% всех веб-сайтов, которые сделаны на CMS. Это 41,1% всех существующих в мире сайтов. Эту платформу для своих блогов используют The New York Times и Forbes. Такую популярность WordPress получил за удобство интерфейса и большие возможности.
 
 #### Ожидаемые результаты:
 
@@ -208,7 +220,7 @@ MySQL работает в режиме репликации Master/Slave.
 
 https://www.eladmin.ru (WordPress)
 
-На сервере you.domain отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен WordPress.  
+На сервере eladmin.ru отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен WordPress.  
 
 В браузере можно открыть URL https://www.eladmin.ru и увидеть главную страницу WordPress.
 
@@ -234,7 +246,7 @@ https://www.eladmin.ru (WordPress)
 
 https://gitlab.eladmin.ru (Gitlab)
 
-На сервере you.domain отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен Gitlab.  
+На сервере eladmin.ru отредактирован upstream для выше указанного URL и он смотрит на виртуальную машину на которой установлен Gitlab.  
 
 При любом коммите в репозиторий с WordPress и создании тега (например, v1.0.0) происходит деплой на виртуальную машину.
 
@@ -264,7 +276,7 @@ https://gitlab.eladmin.ru (Gitlab)
 
 • https://alertmanager.eladmin.ru (Alert Manager)
 
-На сервере you.domain отредактированы upstreams для выше указанных URL и они смотрят на виртуальную машину на которой установлены Prometheus, Alert Manager и Grafana.  
+На сервере eladmin.ru отредактированы upstreams для выше указанных URL и они смотрят на виртуальную машину на которой установлены Prometheus, Alert Manager и Grafana.  
 
 На всех серверах установлен Node Exporter и его метрики доступны Prometheus.  
 
@@ -297,3 +309,49 @@ https://prometheus.eladmin.ru (Prometheus)
 https://alertmanager.eladmin.ru (Alert Manager)
 
 Все репозитории рекомендуется хранить на одном из ресурсов (github.com или gitlab.com).
+
+---
+
+#### Решение
+
+[Репозитарий с terraform и ansible](https://github.com/malzew/devops-diplom)
+
+Скриншоты
+
+https://www.eladmin.ru (WordPress)
+
+![](assets/Screenshot_wordpress1.png)
+
+![](assets/Screenshot_wordpress2.png)
+
+https://gitlab.eladmin.ru (Gitlab)
+
+![](assets/Screenshot_gitlab1.png)
+
+![](assets/Screenshot_gitlab2.png)
+
+![](assets/Screenshot_gitlab3.png)
+
+![](assets/Screenshot_gitlab4.png)
+
+https://grafana.eladmin.ru (Grafana)
+
+![](assets/Screenshot_grafana1.png)
+
+![](assets/Screenshot_grafana2.png)
+
+![](assets/Screenshot_grafana3.png)
+
+https://prometheus.eladmin.ru (Prometheus)
+
+![](assets/Screenshot_prometheus1.png)
+
+![](assets/Screenshot_prometheus2.png)
+
+https://alertmanager.eladmin.ru (Alert Manager)
+
+![](assets/Screenshot_alertmanager1.png)
+
+![](assets/Screenshot_alertmanager2.png)
+
+---
