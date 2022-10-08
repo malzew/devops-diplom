@@ -1,5 +1,5 @@
 ---
-- name: MySQL enable replication
+- name: MySQL configure replication
   hosts: "{{ mysql_hosts }}"
   become: yes
   become_user: root

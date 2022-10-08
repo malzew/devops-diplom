@@ -1,12 +1,12 @@
 ---
-- name: Create a new database with name '{{ database_name }}'
+- name: Create a new database '{{ database_name }}'
   community.mysql.mysql_db:
     name: "{{ database_name }}"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
   when: database_name is defined
 
-- name: Create database '{{ database_name }}' user with password and all database privileges
+- name: Create database user '{{ database_user }}' with password and all database privileges
   community.mysql.mysql_user:
     name: "{{ database_user }}"
     password: "{{ database_password }}"
@@ -14,4 +14,4 @@
     host: "%"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  when: database_name is defined and database_user is defined and database_password is defined
+  when: database_user is defined and database_password is defined

@@ -74,6 +74,10 @@ https://reg.ru
 
 https://cloud.yandex.ru/docs/dns/operations/zone-create-public
 
+Создание и удаление записей в DNS зоне делается из terraform. По условиям задания это A записи.
+
+[dnszone.tf](./terraform/dnszone.tf)
+
 Ожидаемый результат достигнут.
 
 ---

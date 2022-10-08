@@ -22,7 +22,7 @@ resource "null_resource" "proxy_ssh" {
   ]
 }
 
-# Настраиваем фаерволл на NGINX. Включаем NAT(PAT), для того чтобы был доступ в инет с серверов внутри.
+# Настраиваем МСЭ на NGINX. Включаем NAT(PAT), для того чтобы был доступ в интернет с нод внутри.
 resource "null_resource" "proxy_firewall" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_firewall.yml"
@@ -33,7 +33,7 @@ resource "null_resource" "proxy_firewall" {
   ]
 }
 
-# Настраиваем фаерволл на NGINX. Включаем DNAT, для того чтобы был доступ к серверу GitLab из инета по порту TCP 2222, для работы git по ssh из инета.
+# Настраиваем МСЭ на NGINX. Включаем DNAT, для того чтобы дать доступ к серверу GitLab из интернета по порту TCP 2222. Необходимо для работы git по ssh.
 # Это крайний перезапуск UFW, после можно начинать конфигурировать ноды внутри.
 resource "null_resource" "proxy_insert_dnat_rule" {
   provisioner "local-exec" {
@@ -45,7 +45,7 @@ resource "null_resource" "proxy_insert_dnat_rule" {
   ]
 }
 
-# Создание TLS сертификатов, используя letsencrypt. Создаем сертификат для коренного домена.
+# Создание TLS сертификатов, используя letsencrypt. Создаем сертификат для корневого домена.
 resource "null_resource" "get_letsencrypt" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/letsencrypt.yml --extra-vars 'domain_name=${var.dns_zone}'"
@@ -70,10 +70,10 @@ resource "null_resource" "get_letsencrypt_services" {
   ]
 }
 
-# Создаем конфиг nginx для коренного домена, с доступом по TLS и редиректом http -> https
+# Создаем конфиг nginx для корневого домена, с доступом по TLS и редиректом http -> https
 resource "null_resource" "create_proxy_config" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=app default_conf_file=default.conf'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_config.yml --extra-vars 'domain_name=${var.dns_zone} conf_dir=/etc/nginx/conf.d service_ip_port=app:8080 default_conf_file=default.conf'"
   }
 
   depends_on = [

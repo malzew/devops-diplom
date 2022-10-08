@@ -1,5 +1,6 @@
 ---
-- name: Ensure replication user exists on master
+# Источник https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml
+- name: Ensure replication user exists on master db
   mysql_user:
     name: "{{ mysql_replication_user.name }}"
     host: "{{ mysql_replication_user.host }}"
@@ -24,7 +25,7 @@
   mysql_replication:
     mode: getprimary
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  delegate_to: "{{ mysql_replication_master_ext }}"
+  delegate_to: "{{ mysql_replication_master }}"
   register: master
   when:
     - mysql_replication_role == 'slave'
