@@ -24,7 +24,7 @@
   ansible.builtin.pip:
     name: docker
 
-- name: Add the user 'ubuntu' to group 'docker'
+- name: Add user 'ubuntu' to group 'docker'
   ansible.builtin.user:
     name: ubuntu
     groups: docker

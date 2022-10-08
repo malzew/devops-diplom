@@ -11,7 +11,7 @@ resource "null_resource" "proxy" {
 }
 
 # Генерируем ssh ключи на NGINX, забираем открытый ключ в files/id_rsa.pub. Копируем открытый ключ на ноды внутри, чтобы к ним был доступ с сервера NGINX.
-# Внутренние ноды не имеют внешних адресов и не доступны непосредственно из инета. Заходить будем через сервер NGINX, используя ssh туннель.
+# Внутренние ноды не имеют внешних адресов. Заходить будем через сервер NGINX, используя ssh proxy.
 resource "null_resource" "proxy_ssh" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_ssh.yml --extra-vars 'username=${var.username} destfile=files/id_rsa.pub srcfile=files/id_rsa.pub'"
@@ -22,7 +22,7 @@ resource "null_resource" "proxy_ssh" {
   ]
 }
 
-# Настраиваем МСЭ на NGINX. Включаем NAT(PAT), для того чтобы был доступ в интернет с нод внутри.
+# Настраиваем МСЭ на NGINX. Включаем NAT(PAT), для того чтобы был доступ в интернет с остальных нод.
 resource "null_resource" "proxy_firewall" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_firewall.yml"
@@ -34,7 +34,7 @@ resource "null_resource" "proxy_firewall" {
 }
 
 # Настраиваем МСЭ на NGINX. Включаем DNAT, для того чтобы дать доступ к серверу GitLab из интернета по порту TCP 2222. Необходимо для работы git по ssh.
-# Это крайний перезапуск UFW, после можно начинать конфигурировать ноды внутри.
+# Это крайний перезапуск UFW, после можно начинать конфигурировать остальные ноды.
 resource "null_resource" "proxy_insert_dnat_rule" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_firewall_insert_dnat_rule.yml --extra-vars 'proto=tcp dest_port=2222 dest=${yandex_compute_instance.gitlab.network_interface.0.ip_address}:2222'"
@@ -94,7 +94,7 @@ resource "null_resource" "create_proxy_config_services" {
   ]
 }
 
-# Рестарт nginx для применения созанных конфигов
+# Рестарт nginx для применения созданных конфигов
 resource "null_resource" "proxy_restart" {
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/proxy_restart.yml"

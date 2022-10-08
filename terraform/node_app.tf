@@ -4,14 +4,14 @@ resource "yandex_compute_instance" "app" {
   zone        = "ru-central1-a"
   hostname    = "app.${var.dns_zone}"
 
-  # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
+  # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
     cores  = 4
     memory = 4
     core_fraction = 100
   }
 
-  # Загрузочный диск из стандартного образа, на SSD, 40Gb
+  # Загрузочный диск из стандартного образа, на SSD, 20b
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.ubuntu.id
