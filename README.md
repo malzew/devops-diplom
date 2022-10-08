@@ -560,7 +560,9 @@ $ terraform destroy --auto-approve
 
 Ожидаемый результат достигнут.
 
-Скриншоты
+Мое представление о дальнейшем развитии работы - в [TODO](./TODO.md) листе.
+
+Скриншоты:
 
 https://www.eladmin.ru (WordPress)
 
