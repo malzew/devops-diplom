@@ -4,7 +4,7 @@ resource "yandex_compute_instance" "gitlab" {
   zone        = "ru-central1-a"
   hostname    = "gitlab.${var.dns_zone}"
 
-  # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
+  # В ресурсах 6 ядер, 6 гигов оперативы, под 100% нагрузку
   resources {
     cores  = 6
     memory = 6

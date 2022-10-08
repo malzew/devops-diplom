@@ -4,7 +4,7 @@ resource "yandex_compute_instance" "runner" {
   zone        = "ru-central1-a"
   hostname    = "runner.${var.dns_zone}"
 
-  # В ресурсах 2 ядра, 4 гига оперативы, под 100% нагрузку
+  # В ресурсах 4 ядра, 4 гига оперативы, под 100% нагрузку
   resources {
     cores  = 4
     memory = 4
