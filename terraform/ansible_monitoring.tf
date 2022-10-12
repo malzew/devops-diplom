@@ -2,7 +2,7 @@
 # В дальнейшем эти части будут слиты в единый конфиг. Данный подход позволяет из terraform изменять количество нод для мониторинга
 resource "null_resource" "prometheus_config" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/prometheus_config.yml --extra-vars 'monitoring_target=${each.value}'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/prometheus_config.yml --extra-vars 'monitoring_target=${each.key} monitoring_target_addr=${each.value}'"
   }
 
   for_each = var.monitoring
@@ -19,7 +19,7 @@ resource "null_resource" "prometheus_config" {
 # Настройка https://qna.habr.com/q/1134068
 resource "null_resource" "monitoring_install" {
   provisioner "local-exec" {
-    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/monitoring_install.yml --extra-vars 'telega_bot_token=${var.telega_bot_token} telega_chat_id=${var.telega_chat_id}'"
+    command = "ANSIBLE_FORCE_COLOR=1 ansible-playbook -i ../ansible/inventory ../ansible/monitoring_install.yml --extra-vars 'telega_bot_token=${var.telega_bot_token} telega_chat_id=${var.telega_chat_id} mysqld_exporter_user=${var.mysqld_exporter_user} mysqld_exporter_pass=${var.mysqld_exporter_pass}'"
   }
 
   depends_on = [

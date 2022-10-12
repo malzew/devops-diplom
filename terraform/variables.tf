@@ -43,14 +43,29 @@ variable "services" {
 # Список для настройки мониторинга
 variable "monitoring" {
   default = {
-    nginx = "nginx"
-    www = "app"
-    gitlab = "gitlab"
-    runner = "runner"
-    db01 = "db01"
-    db02 = "db02"
+    nginx = "nginx:9100"
+    www = "app:9100"
+    gitlab = "gitlab:9100"
+    runner = "runner:9100"
+    db01 = "db01:9100"
+    db02 = "db02:9100"
+    mysql_master = "db01:9104"
+    mysql_slave = "db02:9104"
   }
 }
+
+# Mysql exporter for prometheus
+# https://github.com/prometheus/mysqld_exporter
+variable "mysqld_exporter_user" {
+  type = string
+  default = "mysqld_exporter"
+}
+
+variable "mysqld_exporter_pass" {
+  type = string
+  default = "gjkhsdrgheohalnewrv89"
+}
+
 
 # Настройки СУБД, боевые нужно переместить в secrets.tf
 variable "database" {

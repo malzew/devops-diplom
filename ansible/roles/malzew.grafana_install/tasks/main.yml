@@ -64,6 +64,14 @@
     group: grafana
     mode: 0644
 
+- name: Create /etc/grafana/dashboards/mysql_rev1.json file from j2 template
+  ansible.builtin.template:
+    src: "mysql_rev1.json.j2"
+    dest: "/etc/grafana/dashboards/mysql_rev1.json"
+    owner: root
+    group: grafana
+    mode: 0644
+
 - name: Make sure a service grafana is running
   ansible.builtin.systemd:
     enabled: yes

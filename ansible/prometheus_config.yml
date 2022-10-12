@@ -6,4 +6,6 @@
   remote_user: ubuntu
   roles:
   - role: malzew.prometheus_add_config
-    when: monitoring_target is defined
+    when:
+      - monitoring_target is defined
+      - monitoring_target_addr is defined

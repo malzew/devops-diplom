@@ -17,8 +17,8 @@
 
 - name: Download prometheus binary
   ansible.builtin.get_url:
-    url: "https://github.com/prometheus/prometheus/releases/download/v2.37.1/prometheus-2.37.1.linux-amd64.tar.gz"
-    dest: "/tmp/prometheus-2.37.1.linux-amd64.tar.gz"
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ packet_version }}/prometheus-{{ packet_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/prometheus-{{ packet_version }}.linux-amd64.tar.gz"
     mode: 0644
   register: _download_binary
   until: _download_binary is succeeded
@@ -27,14 +27,14 @@
 
 - name: Unpack prometheus binary
   ansible.builtin.unarchive:
-    src: "/tmp/prometheus-2.37.1.linux-amd64.tar.gz"
+    src: "/tmp/prometheus-{{ packet_version }}.linux-amd64.tar.gz"
     dest: "/tmp"
-    creates: "/tmp/prometheus-2.37.1.linux-amd64/prometheus"
+    creates: "/tmp/prometheus-{{ packet_version }}.linux-amd64/prometheus"
     remote_src: yes
 
 - name: Copy prometheus binary file on the remote machine
   ansible.builtin.copy:
-    src: "/tmp/prometheus-2.37.1.linux-amd64/prometheus"
+    src: "/tmp/prometheus-{{ packet_version }}.linux-amd64/prometheus"
     dest: "/usr/local/bin/prometheus"
     mode: 0755
     owner: root

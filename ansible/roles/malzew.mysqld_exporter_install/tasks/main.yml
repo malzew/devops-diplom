@@ -1,0 +1,73 @@
+---
+- name: Download mysqld_exporter binary
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/mysqld_exporter/releases/download/v{{ packet_version }}/mysqld_exporter-{{ packet_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/mysqld_exporter-{{ packet_version }}.linux-amd64.tar.gz"
+    mode: 0644
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+
+- name: Unpack mysqld_exporter binary
+  ansible.builtin.unarchive:
+    src: "/tmp/mysqld_exporter-{{ packet_version }}.linux-amd64.tar.gz"
+    dest: "/tmp"
+    creates: "/tmp/mysqld_exporter-{{ packet_version }}.linux-amd64.tar.gz/mysqld_exporter"
+    remote_src: yes
+
+- name: Copy mysqld_exporter binary file on the remote machine
+  ansible.builtin.copy:
+    src: "/tmp/mysqld_exporter-{{ packet_version }}.linux-amd64/mysqld_exporter"
+    dest: "/usr/local/bin/mysqld_exporter"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Create database user '{{ mysqld_exporter_user }}'
+  community.mysql.mysql_user:
+    name: "{{ mysqld_exporter_user }}"
+    password: "{{ mysqld_exporter_pass }}"
+    priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT"
+    host: "localhost"
+    resource_limits:
+      MAX_USER_CONNECTIONS: 3
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  when:
+    - mysqld_exporter_user is defined
+    - mysqld_exporter_pass is defined
+
+- name: Create a directory /etc/mysqld_exporter if it does not exist
+  ansible.builtin.file:
+    path: "/etc/mysqld_exporter"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create /etc/mysqld_exporter/mysqld_exporter.cnf file from j2 template
+  ansible.builtin.template:
+    src: "mysqld_exporter.cnf.j2"
+    dest: "/etc/mysqld_exporter/mysqld_exporter.cnf"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - mysqld_exporter_user is defined
+    - mysqld_exporter_pass is defined
+
+- name: Create mysqld_exporter.service file from j2 template
+  ansible.builtin.template:
+    src: "mysqld_exporter.service.j2"
+    dest: "/etc/systemd/system/mysqld_exporter.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Make sure a service mysqld_exporter is running
+  ansible.builtin.systemd:
+    enabled: yes
+    state: started
+    name: mysqld_exporter

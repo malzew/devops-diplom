@@ -1,0 +1,14 @@
+[Unit]
+Description=Mysqld_exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/local/bin/mysqld_exporter \
+--config.my-cnf=/etc/mysqld_exporter/mysqld_exporter.cnf
+
+[Install]
+WantedBy=multi-user.target

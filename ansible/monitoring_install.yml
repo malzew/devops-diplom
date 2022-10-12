@@ -15,6 +15,14 @@
   roles:
   - role: malzew.node_exporter_install
 
+- name: Mysqld_exporter install
+  hosts: mysql
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  roles:
+  - role: malzew.mysqld_exporter_install
+
 - name: Alertmanager install
   hosts: monitoring
   become: yes

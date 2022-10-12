@@ -17,8 +17,8 @@
 
 - name: Download alertmanager binary
   ansible.builtin.get_url:
-    url: "https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz"
-    dest: "/tmp/alertmanager-0.24.0.linux-amd64.tar.gz"
+    url: "https://github.com/prometheus/alertmanager/releases/download/v{{ packet_version }}/alertmanager-{{ packet_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/alertmanager-{{ packet_version }}.linux-amd64.tar.gz"
     mode: 0644
   register: _download_binary
   until: _download_binary is succeeded
@@ -27,14 +27,14 @@
 
 - name: Unpack alertmanager binary
   ansible.builtin.unarchive:
-    src: "/tmp/alertmanager-0.24.0.linux-amd64.tar.gz"
+    src: "/tmp/alertmanager-{{ packet_version }}.linux-amd64.tar.gz"
     dest: "/tmp"
-    creates: "/tmp/alertmanager-0.24.0.linux-amd64/alertmanager"
+    creates: "/tmp/alertmanager-{{ packet_version }}.linux-amd64/alertmanager"
     remote_src: yes
 
 - name: Copy alertmanager binary file on the remote machine
   ansible.builtin.copy:
-    src: "/tmp/alertmanager-0.24.0.linux-amd64/alertmanager"
+    src: "/tmp/alertmanager-{{ packet_version }}.linux-amd64/alertmanager"
     dest: "/usr/local/bin/alertmanager"
     mode: 0755
     owner: root
